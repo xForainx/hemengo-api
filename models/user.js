@@ -1,47 +1,64 @@
-/************************************/
-/*** Import des modules nécessaires */
-const { DataTypes } = require('sequelize')
-const DB = require('../db.config')
+// Import necessary modules
+const { dataTypes } = require('sequelize');
+const db = require('../db.config');
 
-/*******************************/
-/*** Définition du modèle User */
-const User = DB.define('User', {
-    id: {
-        type: DataTypes.INTEGER(10),
-        primaryKey: true,
-        autoIncrement: true
-    },
-    nom:{
-        type: DataTypes.STRING(100),
-        defaultValue: '',
-        allowNull: false
-    },
-    prenom:{
-        type: DataTypes.STRING(100),
-        defaultValue: '',
-        allowNull: false
-    },
-    pseudo:{
-        type: DataTypes.STRING(100),
-        allowNull: false,
-        unique: true
-    },
-    email:{
-        type: DataTypes.STRING,
-        validate:{
-            isEmail: true        // Ici une validation de données
-        }
-    },
-    password:{
-        type: DataTypes.STRING(64),
-        is: /^[0-9a-f]{64}$/i    // Ici une contrainte
-    }
-}, { paranoid: true })           // Ici pour faire du softDelete
+// User model definition
+const User = db.define('user', {
 
-/*******************************/
-/*** Synchronisation du modèle */
+	id: {
+		type: dataTypes.INTEGER(11),
+		primaryKey: true,
+		autoIncrement: true
+	},
+	username: {
+		type: dataTypes.STRING(45),
+		allowNull: false,
+		unique: true
+	},
+	firstname: {
+		type: dataTypes.STRING(255),
+		defaultValue: '',
+		allowNull: true
+	},
+	lastname: {
+		type: dataTypes.STRING(255),
+		defaultValue: '',
+		allowNull: true
+	},
+	email: {
+		type: dataTypes.STRING(255),
+		allowNull: false,
+		// Some data validation
+		validate: {
+			isEmail: true
+		}
+	},
+	password: {
+		type: dataTypes.STRING(255),
+		allowNull: false,
+		// Some constraint
+		is: /^[0-9a-f]{64}$/i
+	},
+	address: {
+		type: dataTypes.STRING(255),
+		defaultValue: '',
+		allowNull: true
+	},
+	verified: {
+		type: dataTypes.BOOLEAN,
+		allowNull: false,
+		defaultValue: false
+	}
+},
+	{
+		// Soft delete
+		paranoid: true
+	}
+);
+
+// Model synchronization
 // User.sync()
-// User.sync({force: true})
-// User.sync({alter: true})
+// User.sync({ force: true })
+// User.sync({ alter: true })
 
-module.exports = User
+module.exports = User;
