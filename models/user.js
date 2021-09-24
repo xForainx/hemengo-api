@@ -1,32 +1,32 @@
 // Import necessary modules
-const { dataTypes } = require('sequelize');
+const { DataTypes } = require('sequelize');
 const db = require('../db.config');
 
 // User model definition
 const User = db.define('user', {
 
 	id: {
-		type: dataTypes.INTEGER(11),
+		type: DataTypes.INTEGER(11),
 		primaryKey: true,
 		autoIncrement: true
 	},
 	username: {
-		type: dataTypes.STRING(45),
+		type: DataTypes.STRING(45),
 		allowNull: false,
 		unique: true
 	},
 	firstname: {
-		type: dataTypes.STRING(255),
+		type: DataTypes.STRING(255),
 		defaultValue: '',
 		allowNull: true
 	},
 	lastname: {
-		type: dataTypes.STRING(255),
+		type: DataTypes.STRING(255),
 		defaultValue: '',
 		allowNull: true
 	},
 	email: {
-		type: dataTypes.STRING(255),
+		type: DataTypes.STRING(255),
 		allowNull: false,
 		// Some data validation
 		validate: {
@@ -34,18 +34,18 @@ const User = db.define('user', {
 		}
 	},
 	password: {
-		type: dataTypes.STRING(255),
+		type: DataTypes.STRING(255),
 		allowNull: false,
 		// Some constraint
 		is: /^[0-9a-f]{64}$/i
 	},
 	address: {
-		type: dataTypes.STRING(255),
+		type: DataTypes.STRING(255),
 		defaultValue: '',
 		allowNull: true
 	},
 	verified: {
-		type: dataTypes.BOOLEAN,
+		type: DataTypes.BOOLEAN,
 		allowNull: false,
 		defaultValue: false
 	}
