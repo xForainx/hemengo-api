@@ -27,8 +27,8 @@ app.get('*', (req, res) => {
 	res.status(501).send("Route not implemented");
 });
 
-app.use('/user', checkTokenMiddleware, routerUser);
-app.use('/auth', routerAuth);
+app.use('./auth', routerAuth);
+app.use('./user', checkTokenMiddleware, routerUser);
 
 // Start server with database test
 db.authenticate().then(() => {

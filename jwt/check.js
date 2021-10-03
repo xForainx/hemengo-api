@@ -32,7 +32,6 @@ const checkTokenMiddleware = (req, res, next) => {
 				message: "Unauthorized - Incorrect token"
 			});
 		}
-
 		next();
 	});
 }
