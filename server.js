@@ -25,14 +25,14 @@ app.get('/', (req, res) => {
 	res.send("Welcome to the Hemengo Distrib API");
 });
 
-app.get('*', (req, res) => {
-	res.status(501).send("Route not implemented");
-});
-
 app.use('/auth', routerAuth);
 app.use('/user', checkTokenMiddleware, routerUser);
 app.use('/producer', checkTokenMiddleware, routerProducer);
-app.use('/vendingMachine', checkTokenMiddleware, routerVendingMachine);
+app.use('/machines', checkTokenMiddleware, routerVendingMachine);
+
+app.get('*', (req, res) => {
+	res.status(501).send("Route not implemented");
+});
 
 // Start server with database test
 db.authenticate().then(() => {

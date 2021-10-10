@@ -18,9 +18,9 @@ router.use((req, res, next) => {
 // Routing of User ressource
 router.get('', (req, res) => {
 
-	VendingMachine.findAll().then(VendingMachines => {
+	VendingMachine.findAll().then(machines => {
 
-		res.json({ data: VendingMachines });
+		res.json({ data: machines });
 
 	}).catch(err => {
 
