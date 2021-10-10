@@ -3,7 +3,7 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 
 // Import necessary models
-const User = require('../models/user');
+const User = require('../models/User');
 
 // Use Express router
 let router = express.Router();

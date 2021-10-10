@@ -7,8 +7,10 @@ const checkTokenMiddleware = require('./jwt/check');
 let db = require('./db.config');
 
 // Import routing modules
-const routerUser = require('./routes/users');
+const routerUser = require('./routes/user');
 const routerAuth = require('./routes/auth');
+const routerProducer = require('./routes/producer');
+const routerVendingMachine = require('./routes/vendingMachine');
 
 // Init of the API
 const app = express();
@@ -28,7 +30,9 @@ app.get('*', (req, res) => {
 });
 
 app.use('/auth', routerAuth);
-app.use('/users', checkTokenMiddleware, routerUser);
+app.use('/user', checkTokenMiddleware, routerUser);
+app.use('/producer', checkTokenMiddleware, routerProducer);
+app.use('/vendingMachine', checkTokenMiddleware, routerVendingMachine);
 
 // Start server with database test
 db.authenticate().then(() => {
