@@ -11,7 +11,7 @@ let router = express.Router();
 // Logger middleware
 router.use((req, res, next) => {
 	const event = new Date();
-	console.log("auth time", event.toString());
+	console.log("Authentication time : ", event.toString());
 	next();
 });
 

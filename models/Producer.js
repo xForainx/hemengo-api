@@ -3,34 +3,18 @@ const { DataTypes } = require('sequelize');
 const db = require('../db.config');
 
 // User model definition
-const User = db.define('User', {
+const Producer = db.define('Producer', {
 	id: {
 		type: DataTypes.INTEGER(11),
 		primaryKey: true,
 		autoIncrement: true
 	},
-	email: {
+	name: {
 		type: DataTypes.STRING(255),
 		allowNull: false,
-		unique: true,
-		validate: {
-			isEmail: true
-		}
+		unique: true
 	},
-	password: {
-		type: DataTypes.STRING(255),
-		allowNull: false,
-		is: /^[0-9a-f]{64}$/i
-	},
-	username: {
-		type: DataTypes.STRING(45),
-		defaultValue: ''
-	},
-	firstname: {
-		type: DataTypes.STRING(255),
-		defaultValue: ''
-	},
-	lastname: {
+	presentation: {
 		type: DataTypes.STRING(255),
 		defaultValue: ''
 	},
@@ -46,4 +30,4 @@ const User = db.define('User', {
 	{ paranoid: true }
 );
 
-module.exports = User;
+module.exports = Producer;

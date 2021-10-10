@@ -12,7 +12,7 @@ let router = express.Router();
 // Logger middleware
 router.use((req, res, next) => {
 	const event = new Date();
-	console.log("auth time", event.toString());
+	console.log("Authentication attempt at : ", event.toString());
 	next();
 })
 
@@ -29,8 +29,7 @@ router.post('/login', (req, res) => {
 	}
 
 	User.findOne({
-		where: { email: email },
-		raw: true
+		where: { email: email }
 	}).then(user => {
 		// Check if user exists
 		if (user === null) {

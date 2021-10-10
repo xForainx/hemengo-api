@@ -10,13 +10,13 @@ let sequelize = new Sequelize(
 		host: process.env.DB_HOST,
 		port: process.env.DB_PORT,
 		dialect: 'mariadb',
-		logging: false
+		logging: console.log
 	}
 );
 
 // Models synchronization
-//sequelize.sync(err => {
-//	console.log("Database sync error", err)
-//});
+sequelize.sync({ force: true }, err => {
+	console.log("Database sync error", err);
+});
 
 module.exports = sequelize;

@@ -7,7 +7,7 @@ const checkTokenMiddleware = require('./jwt/check');
 let db = require('./db.config');
 
 // Import routing modules
-const routerUser = require('./routes/user');
+const routerUser = require('./routes/users');
 const routerAuth = require('./routes/auth');
 
 // Init of the API
@@ -20,22 +20,22 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routing
 app.get('/', (req, res) => {
-	res.send("welcome");
+	res.send("Welcome to the Hemengo Distrib API");
 });
 
 app.get('*', (req, res) => {
 	res.status(501).send("Route not implemented");
 });
 
-app.use('./auth', routerAuth);
-app.use('./user', checkTokenMiddleware, routerUser);
+app.use('/auth', routerAuth);
+app.use('/users', checkTokenMiddleware, routerUser);
 
 // Start server with database test
 db.authenticate().then(() => {
 	console.log("Database connection ok");
 }).then(() => {
 	app.listen(process.env.SERVER_PORT, () => {
-		console.log(`This server is running on port ${process.env.SERVER_PORT}. Have fun !`);
+		console.log(`Server is running on port ${process.env.SERVER_PORT}`);
 	});
 }).catch(err => {
 	console.log('Database Error', err);
