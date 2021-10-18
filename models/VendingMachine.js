@@ -9,10 +9,13 @@ const VendingMachine = db.define('VendingMachine', {
 		primaryKey: true,
 		autoIncrement: true
 	},
-	ref: {
+	uuid: {
 		type: DataTypes.STRING(255),
 		allowNull: false,
 		unique: true
+	},
+	ref: {
+		type: DataTypes.STRING(255)
 	},
 	latitude: {
 		type: DataTypes.FLOAT,
