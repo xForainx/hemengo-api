@@ -10,7 +10,7 @@ const VendingMachine = db.define('VendingMachine', {
 		autoIncrement: true
 	},
 	uuid: {
-		type: DataTypes.STRING(255),
+		type: DataTypes.UUID,
 		allowNull: false,
 		unique: true
 	},

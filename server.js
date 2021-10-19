@@ -11,6 +11,7 @@ const routerUser = require('./routes/user');
 const routerAuth = require('./routes/auth');
 const routerProducer = require('./routes/producer');
 const routerVendingMachine = require('./routes/vendingMachine');
+const routerOrder = require('./routes/order');
 
 // Init of the API
 const app = express();
@@ -28,7 +29,8 @@ app.get('/', (req, res) => {
 app.use('/auth', routerAuth);
 app.use('/user', checkTokenMiddleware, routerUser);
 app.use('/producer', checkTokenMiddleware, routerProducer);
-app.use('/machines', checkTokenMiddleware, routerVendingMachine);
+app.use('/vendingmachine', checkTokenMiddleware, routerVendingMachine);
+app.use('/order', checkTokenMiddleware, routerOrder);
 
 app.get('*', (req, res) => {
 	res.status(501).send("Route not implemented");

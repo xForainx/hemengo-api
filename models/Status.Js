@@ -17,7 +17,7 @@ const Status = db.define('Status', {
 	message: {
 		type: DataTypes.STRING(255),
 		defaultValue: ""
-	},
+	}
 });
 
 module.exports = Status;

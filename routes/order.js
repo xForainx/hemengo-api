@@ -3,7 +3,7 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 
 // Import necessary models
-const Producer = require('../models/Producer');
+const Order = require('../models/Order');
 
 // Use Express router
 let router = express.Router();
@@ -18,9 +18,9 @@ router.use((req, res, next) => {
 // Routing of User ressource
 router.get('', (req, res) => {
 
-	Producer.findAll().then(producers => {
+	Order.findAll().then(orders => {
 
-		res.json({ data: producers });
+		res.json({ data: orders });
 
 	}).catch(err => {
 
