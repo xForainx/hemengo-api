@@ -14,7 +14,7 @@ router.use((req, res, next) => {
 	const event = new Date();
 	console.log("Authentication attempt at : ", event.toString());
 	next();
-})
+});
 
 // Routing of Auth ressource
 router.post('/login', (req, res) => {
@@ -72,6 +72,49 @@ router.post('/login', (req, res) => {
 			error: err
 		});
 	});
-})
+});
+
+router.post('/register', (req, res) => {
+
+	const { email, password } = req.body;
+
+	// Response validation
+	if (!email || !password) {
+		return res.status(400).json({
+			message: "Incorrect email or password"
+		});
+	}
+
+	bcrypt.hash(password, parseInt(process.env.BCRYPT_SALT_ROUND)).then(hash => {
+
+		User.create({ email: email, password: hash }).then(user => {
+
+			// Génération du token
+			const token = jwt.sign({
+				id: user.dataValues.id,
+				username: user.dataValues.username,
+				email: user.dataValues.email
+			}, process.env.JWT_SECRET, {
+				expiresIn: process.env.JWT_DURING
+			});
+
+			return res.json({
+				accessToken: token
+			});
+
+		}).catch(err => {
+			res.status(500).json({
+				message: "Registering process failed",
+				error: err
+			});
+		});
+
+	}).catch(err => {
+		res.status(500).json({
+			message: "Hashing process failed",
+			error: err
+		});
+	});
+});
 
 module.exports = router;

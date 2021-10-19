@@ -20,7 +20,7 @@ const User = db.define('User', {
 	password: {
 		type: DataTypes.STRING(255),
 		allowNull: false,
-		is: /^[0-9a-f]{64}$/i
+		is: /^\w{8,}$/i
 	},
 	username: {
 		type: DataTypes.STRING(45),
