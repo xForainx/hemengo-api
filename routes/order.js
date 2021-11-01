@@ -10,26 +10,26 @@ let router = express.Router();
 
 // Logger middleware
 router.use((req, res, next) => {
-	const event = new Date();
-	console.log("Attempted to access order ressource : ", event.toString());
-	next();
+    const event = new Date();
+    console.log("Attempted to access order ressource : ", event.toString());
+    next();
 });
 
 // Routing of User ressource
 router.get('', (req, res) => {
 
-	Order.findAll().then(orders => {
+    Order.findAll().then(orders => {
 
-		res.json({ orders });
+        res.json({ orders });
 
-	}).catch(err => {
+    }).catch(err => {
 
-		res.status(500).json({
-			message: "Database Error", 
-			error: err
-		});
+        res.status(500).json({
+            message: "Database Error",
+            error: err
+        });
 
-	});
+    });
 });
 
 module.exports = router;

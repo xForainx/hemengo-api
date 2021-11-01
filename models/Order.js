@@ -8,21 +8,21 @@ const VendingMachine = require('./VendingMachine');
 
 // User model definition
 const Order = db.define('Order', {
-	id: {
-		type: DataTypes.INTEGER(11),
-		primaryKey: true,
-		autoIncrement: true
-	},
-	price: {
-		type: DataTypes.FLOAT(11),
-		allowNull: false
-	},
-	pickupDate: {
-		type: DataTypes.DATE,
-		allowNull: false
-	}
+    id: {
+        type: DataTypes.INTEGER(11),
+        primaryKey: true,
+        autoIncrement: true
+    },
+    price: {
+        type: DataTypes.FLOAT(11),
+        allowNull: false
+    },
+    pickupDate: {
+        type: DataTypes.DATE,
+        allowNull: false
+    }
 },
-	{ paranoid: true }
+    { paranoid: true }
 );
 
 // Associations : One-To-Many relations (1<-->N)

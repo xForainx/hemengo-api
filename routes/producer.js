@@ -10,26 +10,26 @@ let router = express.Router();
 
 // Logger middleware
 router.use((req, res, next) => {
-	const event = new Date();
-	console.log("Attempted to access producer ressource : ", event.toString());
-	next();
+    const event = new Date();
+    console.log("Attempted to access producer ressource : ", event.toString());
+    next();
 });
 
 // Routing of User ressource
 router.get('', (req, res) => {
 
-	Producer.findAll().then(producers => {
+    Producer.findAll().then(producers => {
 
-		res.json({ producers });
+        res.json({ producers });
 
-	}).catch(err => {
+    }).catch(err => {
 
-		res.status(500).json({
-			message: "Database Error", 
-			error: err
-		});
+        res.status(500).json({
+            message: "Database Error",
+            error: err
+        });
 
-	});
+    });
 });
 
 module.exports = router;

@@ -23,7 +23,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routing
 app.get('/', (req, res) => {
-	res.send("Welcome to the Hemengo Distrib API");
+    res.send("Welcome to the Hemengo Distrib API");
 });
 
 app.use('/auth', routerAuth);
@@ -33,16 +33,16 @@ app.use('/vendingmachine', checkTokenMiddleware, routerVendingMachine);
 app.use('/order', checkTokenMiddleware, routerOrder);
 
 app.get('*', (req, res) => {
-	res.status(501).send("Route not implemented");
+    res.status(501).send("Route not implemented");
 });
 
 // Start server with database test
 db.authenticate().then(() => {
-	console.log("Database connection ok");
+    console.log("Database connection ok");
 }).then(() => {
-	app.listen(process.env.SERVER_PORT, () => {
-		console.log(`Server is running on port ${process.env.SERVER_PORT}`);
-	});
+    app.listen(process.env.SERVER_PORT, () => {
+        console.log(`Server is running on port ${process.env.SERVER_PORT}`);
+    });
 }).catch(err => {
-	console.log('Database Error', err);
+    console.log('Database Error', err);
 });
