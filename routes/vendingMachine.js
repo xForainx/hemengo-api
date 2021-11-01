@@ -11,7 +11,7 @@ let router = express.Router();
 // Logger middleware
 router.use((req, res, next) => {
 	const event = new Date();
-	console.log("Authentication time : ", event.toString());
+	console.log("Attempted to access vending machine ressource : ", event.toString());
 	next();
 });
 
@@ -20,7 +20,7 @@ router.get('', (req, res) => {
 
 	VendingMachine.findAll().then(machines => {
 
-		res.json({ data: machines });
+		res.json({ machines });
 
 	}).catch(err => {
 

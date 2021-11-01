@@ -12,7 +12,7 @@ let router = express.Router();
 // Logger middleware
 router.use((req, res, next) => {
 	const event = new Date();
-	console.log("Authentication attempt at : ", event.toString());
+	console.log("Attempted to authenticate : ", event.toString());
 	next();
 });
 
@@ -48,9 +48,8 @@ router.post('/login', (req, res) => {
 
 			// Génération du token
 			const token = jwt.sign({
-				id: user.id,
-				username: user.username,
-				email: user.email
+				id: user.dataValues.id,
+				email: user.dataValues.email
 			}, process.env.JWT_SECRET, {
 				expiresIn: process.env.JWT_DURING
 			});
@@ -86,13 +85,10 @@ router.post('/register', (req, res) => {
 	}
 
 	bcrypt.hash(password, parseInt(process.env.BCRYPT_SALT_ROUND)).then(hash => {
-
 		User.create({ email: email, password: hash }).then(user => {
-
 			// Génération du token
 			const token = jwt.sign({
 				id: user.dataValues.id,
-				username: user.dataValues.username,
 				email: user.dataValues.email
 			}, process.env.JWT_SECRET, {
 				expiresIn: process.env.JWT_DURING
