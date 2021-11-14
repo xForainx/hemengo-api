@@ -74,7 +74,7 @@ router.put('', (req, res) => {
         // Check if user already exists
         if (user !== null) {
             return res.status(409).json({
-                message: `User ${username} already exists`
+                message: `User ${email} already exists`
             });
         }
 
