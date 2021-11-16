@@ -44,7 +44,5 @@ db.authenticate().then(() => {
         console.log(`Server is running on port ${process.env.SERVER_PORT}`);
     });
 }).catch(err => {
-    console.log('Database Error', err);
+    console.log('Database error', err);
 });
-
-//Forain was here
