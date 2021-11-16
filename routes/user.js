@@ -59,7 +59,8 @@ router.get('/:id', (req, res) => {
 });
 
 
-// Create one user
+// Create one user : PUT method because a POST/create already exists in 
+// the auth routes (register endpoint)
 router.put('', (req, res) => {
     const { email, password } = req.body;
 

@@ -17,11 +17,12 @@ router.use((req, res, next) => {
 });
 
 // Routing of Auth ressource
-router.post('/login', (req, res) => {
 
+// Log in an existing user by its email and password
+// This route generate a jwt token if successful
+router.post('/login', (req, res) => {
     const { email, password } = req.body;
 
-    // Response validation
     if (!email || !password) {
         return res.status(400).json({
             message: "Incorrect email or password"
@@ -31,7 +32,6 @@ router.post('/login', (req, res) => {
     User.findOne({
         where: { email: email }
     }).then(user => {
-        // Check if user exists
         if (user === null) {
             return res.status(401).json({
                 message: "Account does not exists"
@@ -46,7 +46,7 @@ router.post('/login', (req, res) => {
                 });
             }
 
-            // Génération du token
+            // Generate token
             const token = jwt.sign({
                 id: user.dataValues.id,
                 email: user.dataValues.email
@@ -71,20 +71,23 @@ router.post('/login', (req, res) => {
     });
 });
 
-router.post('/register', (req, res) => {
 
+// Registering (creating) a user with its email and password
+// This route generate a jwt token if successful
+router.post('/register', (req, res) => {
     const { email, password } = req.body;
 
-    // Response validation
     if (!email || !password) {
         return res.status(400).json({
             message: "Incorrect email or password"
         });
     }
 
+    // Hashing and salting password
     bcrypt.hash(password, parseInt(process.env.BCRYPT_SALT_ROUND)).then(hash => {
+        // Creating user
         User.create({ email: email, password: hash }).then(user => {
-            // Génération du token
+            // Generate token
             const token = jwt.sign({
                 id: user.dataValues.id,
                 email: user.dataValues.email
