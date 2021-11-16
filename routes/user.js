@@ -16,6 +16,7 @@ router.use((req, res, next) => {
 });
 
 // Routing of User ressource
+
 // Fetch all users
 router.get('', (req, res) => {
     User.findAll().then(users => {
@@ -27,17 +28,17 @@ router.get('', (req, res) => {
     });
 });
 
+
 // Fetch one user
 router.get('/:id', (req, res) => {
     let userId = parseInt(req.params.id);
-    // Check if id field is here and coherent
+
     if (!userId) {
         return res.status(400).json({
             message: "Missing Parameter"
         });
     }
 
-    // Get user
     User.findOne({
         where: { id: userId },
         raw: true
@@ -57,10 +58,11 @@ router.get('/:id', (req, res) => {
     });
 });
 
+
+// Create one user
 router.put('', (req, res) => {
     const { email, password } = req.body;
 
-    // Response validation
     if (!email || !password) {
         return res.status(400).json({
             message: "Missing data"
@@ -107,37 +109,33 @@ router.put('', (req, res) => {
     });
 });
 
-router.patch('/:id', (req, res) => {
 
+// Update one user
+router.patch('/:id', (req, res) => {
     let userId = parseInt(req.params.id)
 
-    // Check if id field is here and coherent
     if (!userId) {
         return res.status(400).json({
             message: "Missing parameter"
         });
     }
 
-    // User search
     User.findOne({
         where: { id: userId },
         raw: true
     }).then(user => {
-        // Check if user exists
         if (user === null) {
             return res.status(404).json({
                 message: "User does not exists"
             });
         }
 
-        // User update
         User.update(req.body, {
             where: { id: userId }
         }).then(user => {
             res.json({
                 message: "User updated"
             });
-
         }).catch(err => {
             res.status(500).json({
                 message: "Database error",
@@ -152,11 +150,11 @@ router.patch('/:id', (req, res) => {
     });
 });
 
-router.post('/untrash/:id', (req, res) => {
 
+// Restore one user
+router.post('/untrash/:id', (req, res) => {
     let userId = parseInt(req.params.id)
 
-    // Check if id field is here and coherent
     if (!userId) {
         return res.status(400).json({
             message: "Missing parameter"
@@ -177,23 +175,22 @@ router.post('/untrash/:id', (req, res) => {
     });
 });
 
-router.delete('/trash/:id', (req, res) => {
 
+// Soft delete one user
+router.delete('/trash/:id', (req, res) => {
     let userId = parseInt(req.params.id)
 
-    // Check if id field is here and coherent
     if (!userId) {
         return res.status(400).json({
             message: "Missing parameter"
         });
     }
 
-    // User delete
     User.destroy({
         where: { id: userId }
     }).then(() => {
         res.status(204).json({
-            message: "User deleted"
+            message: "User softly deleted"
         });
     }).catch(err => {
         res.status(500).json({
@@ -203,26 +200,25 @@ router.delete('/trash/:id', (req, res) => {
     });
 });
 
-router.delete('/:id', (req, res) => {
 
+// Force delete one user
+router.delete('/:id', (req, res) => {
     let userId = parseInt(req.params.id)
 
-    // Check if id field is here and coherent
     if (!userId) {
         return res.status(400).json({
             message: "Missing parameter"
         });
     }
 
-    // Force user delete
+    // Forcing delete of user
     User.destroy({
         where: { id: userId },
         force: true
     }).then(() => {
         res.status(204).json({
-            message: "User force deleted"
+            message: "User forcely deleted"
         });
-
     }).catch(err => {
         res.status(500).json({
             message: "Database error",
