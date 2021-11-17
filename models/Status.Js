@@ -2,7 +2,10 @@
 const { DataTypes } = require('sequelize');
 const db = require('../db.config');
 
-// User model definition
+/**
+ * Status model definition.
+ * It is mostly about Orders but not only. 
+ */
 const Status = db.define('Status', {
     id: {
         type: DataTypes.INTEGER(11),

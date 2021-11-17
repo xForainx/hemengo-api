@@ -6,7 +6,12 @@ const User = require('./User');
 const Status = require('./Status');
 const VendingMachine = require('./VendingMachine');
 
-// User model definition
+/**
+ * Order model definition.
+ * It implements a FK userId that points to users.id.
+ * It implements a FK statusId that points to statuses.id.
+ * It implements a FK vendingMachineId that points to vendingmachines.id.
+ */
 const Order = db.define('Order', {
     id: {
         type: DataTypes.INTEGER(11),
@@ -14,7 +19,7 @@ const Order = db.define('Order', {
         autoIncrement: true
     },
     price: {
-        type: DataTypes.FLOAT(11),
+        type: DataTypes.DOUBLE,
         allowNull: false
     },
     pickupDate: {
@@ -25,14 +30,8 @@ const Order = db.define('Order', {
     { paranoid: true }
 );
 
-// Associations : One-To-Many relations (1<-->N)
-User.hasMany(Order);
 Order.belongsTo(User);
-
-Status.hasMany(Order);
 Order.belongsTo(Status);
-
-VendingMachine.hasMany(Order);
 Order.belongsTo(VendingMachine);
 
 module.exports = Order;

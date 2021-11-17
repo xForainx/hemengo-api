@@ -3,7 +3,9 @@ const { DataTypes } = require('sequelize');
 const db = require('../db.config');
 const crypto = require('crypto');
 
-// User model definition
+/**
+ * Vending machine model definition.
+ */
 const VendingMachine = db.define('VendingMachine', {
     id: {
         type: DataTypes.INTEGER(11),
@@ -17,7 +19,8 @@ const VendingMachine = db.define('VendingMachine', {
         defaultValue: crypto.randomUUID()
     },
     ref: {
-        type: DataTypes.STRING(255)
+        type: DataTypes.STRING(255),
+        defaultValue: "thx-1138"
     },
     latitude: {
         type: DataTypes.FLOAT,
@@ -31,13 +34,15 @@ const VendingMachine = db.define('VendingMachine', {
         type: DataTypes.STRING(255),
         defaultValue: ''
     },
-    maxLines: {
+    maxLineCapacity: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
+        defaultValue: 6
     },
-    maxRows: {
+    maxRowCapacity: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
+        defaultValue: 5
     }
 },
     { paranoid: true }

@@ -2,7 +2,9 @@
 const { DataTypes } = require('sequelize');
 const db = require('../db.config');
 
-// User model definition
+/**
+ * Producer model definition.
+ */
 const Producer = db.define('Producer', {
     id: {
         type: DataTypes.INTEGER(11),

@@ -1,8 +1,9 @@
-// Import necessary modules
 const { DataTypes } = require('sequelize');
 const db = require('../db.config');
 
-// User model definition
+/**
+ * User model definition.
+ */
 const User = db.define('User', {
     id: {
         type: DataTypes.INTEGER(11),
