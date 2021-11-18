@@ -1,8 +1,5 @@
-// Import necessary modules
 const express = require('express');
-
-// Import necessary models
-const VendingMachine = require('../models/VendingMachine');
+const models = require('../models/index');
 
 // Use Express router
 let router = express.Router();
@@ -18,7 +15,7 @@ router.use((req, res, next) => {
 
 // Fetch all machines
 router.get('', (req, res) => {
-    VendingMachine.findAll().then(machines => {
+    models.VendingMachine.findAll().then(machines => {
         res.json({ machines });
     }).catch(err => {
         res.status(500).json({
@@ -39,7 +36,7 @@ router.get('/:uuid', (req, res) => {
         });
     }
 
-    VendingMachine.findOne({
+    models.VendingMachine.findOne({
         where: { uuid: machineUuid },
         raw: true
     }).then(machine => {
@@ -62,7 +59,7 @@ router.get('/:uuid', (req, res) => {
 // Create one machine
 router.post('', (req, res) => {
     const { ref, latitude, longitude, maxLines, maxRows } = req.body;
-    VendingMachine.create({
+    models.VendingMachine.create({
         ref: ref,
         latitude: latitude,
         longitude: longitude,
@@ -91,7 +88,7 @@ router.patch('/:id', (req, res) => {
         });
     }
 
-    VendingMachine.findOne({
+    models.VendingMachine.findOne({
         where: { id: machineId },
         raw: true
     }).then(machine => {
@@ -102,7 +99,7 @@ router.patch('/:id', (req, res) => {
             });
         }
 
-        VendingMachine.update(req.body, {
+        models.VendingMachine.update(req.body, {
             where: { id: machineId }
         }).then(machine => {
             res.json({
@@ -133,7 +130,7 @@ router.post('/untrash/:id', (req, res) => {
         });
     }
 
-    VendingMachine.restore({
+    models.VendingMachine.restore({
         where: { id: machineId }
     }).then(() => {
         res.status(204).json({
@@ -158,7 +155,7 @@ router.delete('/trash/:id', (req, res) => {
         });
     }
 
-    VendingMachine.destroy({
+    models.VendingMachine.destroy({
         where: { id: machineId }
     }).then(() => {
         res.status(204).json({
@@ -184,7 +181,7 @@ router.delete('/:id', (req, res) => {
     }
 
     // Forcing delete of vending machine
-    VendingMachine.destroy({
+    models.VendingMachine.destroy({
         where: { id: machineId },
         force: true
     }).then(() => {

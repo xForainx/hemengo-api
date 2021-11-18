@@ -2,9 +2,6 @@
 const { DataTypes } = require('sequelize');
 const db = require('../db.config');
 
-const Product = require('./Product');
-const MatrixElement = require('./MatrixElement');
-
 /**
  * Vending machine's Locker model definition.
  * It implements a FK productId that points to products.id.
@@ -41,8 +38,5 @@ const Locker = db.define('Locker', {
 },
     { paranoid: true }
 );
-
-Locker.belongsTo(Product);
-Locker.belongsTo(MatrixElement);
 
 module.exports = Locker;

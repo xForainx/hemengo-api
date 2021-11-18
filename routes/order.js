@@ -1,9 +1,5 @@
-// Import necessary modules
 const express = require('express');
-const bcrypt = require('bcrypt');
-
-// Import necessary models
-const Order = require('../models/Order');
+const models = require('../models/index');
 
 // Use Express router
 let router = express.Router();
@@ -19,7 +15,7 @@ router.use((req, res, next) => {
 
 // Fetch all orders
 router.get('', (req, res) => {
-    Order.findAll().then(orders => {
+    models.Order.findAll().then(orders => {
         res.json({ orders });
     }).catch(err => {
         res.status(500).json({
@@ -40,13 +36,13 @@ router.get('/:id', (req, res) => {
         });
     }
 
-    Order.findOne({
+    models.Order.findOne({
         where: { id: orderId },
         raw: true
     }).then(order => {
         if (order === null) {
             return res.status(404).json({
-                message: "Order does not exist"
+                message: "models.Order does not exist"
             });
         }
         // Found order
@@ -62,10 +58,11 @@ router.get('/:id', (req, res) => {
 
 // Create one order
 // How can we get the price ? Passing an array of products and calculate ?
-// See Product-Order association table...
+// See Product-models.Order association table...
 router.post('', (req, res) => {
     const { userId, statusId, vendingMachineId, price, pickupDate } = req.body;
-    Order.create({
+
+    models.Order.create({
         userId: userId,
         statusId: statusId,
         vendingMachineId: vendingMachineId,
@@ -73,7 +70,7 @@ router.post('', (req, res) => {
         pickupDate: pickupDate
     }).then(order => {
         res.status(200).json({
-            message: "Order created"
+            message: "models.Order created"
         });
     }).catch(err => {
         res.status(500).json({
@@ -94,22 +91,22 @@ router.patch('/:id', (req, res) => {
         });
     }
 
-    Order.findOne({
+    models.Order.findOne({
         where: { id: orderId },
         raw: true
     }).then(order => {
         // Check if order exists
         if (order === null) {
             return res.status(404).json({
-                message: "Order does not exists"
+                message: "models.Order does not exists"
             });
         }
 
-        Order.update(req.body, {
+        models.Order.update(req.body, {
             where: { id: orderId }
         }).then(order => {
             res.json({
-                message: "Order updated"
+                message: "models.Order updated"
             });
         }).catch(err => {
             res.status(500).json({
@@ -136,11 +133,11 @@ router.post('/untrash/:id', (req, res) => {
         });
     }
 
-    Order.restore({
+    models.Order.restore({
         where: { id: orderId }
     }).then(() => {
         res.status(204).json({
-            message: "Order restored"
+            message: "models.Order restored"
         });
     }).catch(err => {
         res.status(500).json({
@@ -161,11 +158,11 @@ router.delete('/trash/:id', (req, res) => {
         });
     }
 
-    Order.destroy({
+    models.Order.destroy({
         where: { id: orderId }
     }).then(() => {
         res.status(204).json({
-            message: "Order softly deleted"
+            message: "models.Order softly deleted"
         });
     }).catch(err => {
         res.status(500).json({
@@ -187,12 +184,12 @@ router.delete('/:id', (req, res) => {
     }
 
     // Forcing delete of order
-    Order.destroy({
+    models.Order.destroy({
         where: { id: orderId },
         force: true
     }).then(() => {
         res.status(204).json({
-            message: "Order forcely deleted"
+            message: "models.Order forcely deleted"
         });
     }).catch(err => {
         res.status(500).json({

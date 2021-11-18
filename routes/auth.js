@@ -1,10 +1,7 @@
-// Import necessary modules
 const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-
-// Import necessary models
-const User = require('../models/user');
+const models = require('../models/index');
 
 // Use Express router
 let router = express.Router();
@@ -29,7 +26,7 @@ router.post('/login', (req, res) => {
         });
     }
 
-    User.findOne({
+    models.User.findOne({
         where: { email: email }
     }).then(user => {
         if (user === null) {
@@ -86,7 +83,7 @@ router.post('/register', (req, res) => {
     // Hashing and salting password
     bcrypt.hash(password, parseInt(process.env.BCRYPT_SALT_ROUND)).then(hash => {
         // Creating user
-        User.create({ email: email, password: hash }).then(user => {
+        models.User.create({ email: email, password: hash }).then(user => {
             // Generate token
             const token = jwt.sign({
                 id: user.dataValues.id,

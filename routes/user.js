@@ -1,9 +1,7 @@
 // Import necessary modules
 const express = require('express');
 const bcrypt = require('bcrypt');
-
-// Import necessary models
-const User = require('../models/User');
+const models = require('../models/index');
 
 // Use Express router
 let router = express.Router();
@@ -19,7 +17,7 @@ router.use((req, res, next) => {
 
 // Fetch all users
 router.get('', (req, res) => {
-    User.findAll().then(users => {
+    models.User.findAll().then(users => {
         res.json({ users });
     }).catch(err => {
         res.status(500).json({
@@ -39,7 +37,7 @@ router.get('/:id', (req, res) => {
         });
     }
 
-    User.findOne({
+    models.User.findOne({
         where: { id: userId },
         raw: true
     }).then(user => {
@@ -70,7 +68,7 @@ router.put('', (req, res) => {
         });
     }
 
-    User.findOne({
+    models.User.findOne({
         where: { email: email },
         raw: true
     }).then(user => {
@@ -85,7 +83,7 @@ router.put('', (req, res) => {
         bcrypt.hash(password, parseInt(process.env.BCRYPT_SALT_ROUND)).then(hash => {
             req.body.password = hash;
             // User creation
-            User.create(req.body).then(user => {
+            models.User.create(req.body).then(user => {
                 res.json({
                     message: "User created",
                     data: user
@@ -121,7 +119,7 @@ router.patch('/:id', (req, res) => {
         });
     }
 
-    User.findOne({
+    models.User.findOne({
         where: { id: userId },
         raw: true
     }).then(user => {
@@ -131,7 +129,7 @@ router.patch('/:id', (req, res) => {
             });
         }
 
-        User.update(req.body, {
+        models.User.update(req.body, {
             where: { id: userId }
         }).then(user => {
             res.json({
@@ -162,7 +160,7 @@ router.post('/untrash/:id', (req, res) => {
         });
     }
 
-    User.restore({
+    models.User.restore({
         where: { id: userId }
     }).then(() => {
         res.status(204).json({
@@ -187,7 +185,7 @@ router.delete('/trash/:id', (req, res) => {
         });
     }
 
-    User.destroy({
+    models.User.destroy({
         where: { id: userId }
     }).then(() => {
         res.status(204).json({
@@ -213,7 +211,7 @@ router.delete('/:id', (req, res) => {
     }
 
     // Forcing delete of user
-    User.destroy({
+    models.User.destroy({
         where: { id: userId },
         force: true
     }).then(() => {

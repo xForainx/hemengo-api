@@ -1,9 +1,5 @@
-// Import necessary modules
 const express = require('express');
-const bcrypt = require('bcrypt');
-
-// Import necessary models
-const Producer = require('../models/Producer');
+const models = require('../models/index');
 
 // Use Express router
 let router = express.Router();
@@ -19,7 +15,7 @@ router.use((req, res, next) => {
 
 // Fetch all producers
 router.get('', (req, res) => {
-    Producer.findAll().then(producers => {
+    models.Producer.findAll().then(producers => {
         res.json({ producers });
     }).catch(err => {
         res.status(500).json({
@@ -40,7 +36,7 @@ router.get('/:id', (req, res) => {
         });
     }
 
-    Producer.findOne({
+    models.Producer.findOne({
         where: { id: producerId },
         raw: true
     }).then(producer => {
@@ -63,7 +59,8 @@ router.get('/:id', (req, res) => {
 // Create one producer
 router.post('', (req, res) => {
     const { name, presentation, address } = req.body;
-    Producer.create({
+
+    models.Producer.create({
         name: name,
         presentation: presentation,
         address: address
@@ -90,7 +87,7 @@ router.patch('/:id', (req, res) => {
         });
     }
 
-    Producer.findOne({
+    models.Producer.findOne({
         where: { id: producerId },
         raw: true
     }).then(producer => {
@@ -101,7 +98,7 @@ router.patch('/:id', (req, res) => {
             });
         }
 
-        Producer.update(req.body, {
+        models.Producer.update(req.body, {
             where: { id: producerId }
         }).then(producer => {
             res.json({
@@ -132,7 +129,7 @@ router.post('/untrash/:id', (req, res) => {
         });
     }
 
-    Producer.restore({
+    models.Producer.restore({
         where: { id: producerId }
     }).then(() => {
         res.status(204).json({
@@ -157,7 +154,7 @@ router.delete('/trash/:id', (req, res) => {
         });
     }
 
-    Producer.destroy({
+    models.Producer.destroy({
         where: { id: producerId }
     }).then(() => {
         res.status(204).json({
@@ -183,7 +180,7 @@ router.delete('/:id', (req, res) => {
     }
 
     // Forcing delete of producer
-    Producer.destroy({
+    models.Producer.destroy({
         where: { id: producerId },
         force: true
     }).then(() => {

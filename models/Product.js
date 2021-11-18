@@ -2,8 +2,6 @@
 const { DataTypes } = require('sequelize');
 const db = require('../db.config');
 
-const ProductCategory = require('./ProductCategory');
-
 /**
  * Product model definition.
  * It implements a FK productCategoryId that points to productcategories.id.
@@ -36,7 +34,5 @@ const Product = db.define('Product', {
 },
     { paranoid: true }
 );
-
-Product.belongsTo(ProductCategory);
 
 module.exports = Product;

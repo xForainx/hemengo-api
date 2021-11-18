@@ -2,10 +2,6 @@
 const { DataTypes } = require('sequelize');
 const db = require('../db.config');
 
-const User = require('./User');
-const Status = require('./Status');
-const VendingMachine = require('./VendingMachine');
-
 /**
  * Order model definition.
  * It implements a FK userId that points to users.id.
@@ -29,9 +25,5 @@ const Order = db.define('Order', {
 },
     { paranoid: true }
 );
-
-Order.belongsTo(User);
-Order.belongsTo(Status);
-Order.belongsTo(VendingMachine);
 
 module.exports = Order;
