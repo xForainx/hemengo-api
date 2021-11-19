@@ -58,20 +58,20 @@ router.get('/:id', (req, res) => {
 
 // Create one order
 // How can we get the price ? Passing an array of products and calculate ?
-// See Product-models.Order association table...
+// See Product-Order association table...
 router.post('', (req, res) => {
     const {
-        userId,
-        statusId,
-        vendingMachineId,
+        UserId,
+        StatusId,
+        VendingMachineId,
         price,
         pickupDate
     } = req.body
 
     models.Order.create({
-        userId,
-        statusId,
-        vendingMachineId,
+        UserId,
+        StatusId,
+        VendingMachineId,
         price,
         pickupDate
     }).then(order => {
