@@ -59,7 +59,7 @@ router.get('/:id', (req, res) => {
 // Create one producer
 router.post('', (req, res) => {
     const {
-        cityId,
+        CityId,
         name,
         presentation,
         street,
@@ -67,7 +67,7 @@ router.post('', (req, res) => {
     } = req.body
 
     models.Producer.create({
-        cityId,
+        CityId,
         name,
         presentation,
         street,

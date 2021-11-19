@@ -15,7 +15,7 @@ let sequelize = new Sequelize(
 )
 
 // Models synchronization
-sequelize.sync({ alter: true }, err => {
+sequelize.sync({ force: true }, err => {
     console.log("Database sync error", err)
 })
 

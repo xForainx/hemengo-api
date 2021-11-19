@@ -16,6 +16,8 @@ const ProductCategory = db.define('ProductCategory', {
         allowNull: false,
         unique: true
     }
-})
+},
+    { paranoid: true }
+)
 
 module.exports = ProductCategory
