@@ -59,7 +59,7 @@ router.get('/:uuid', (req, res) => {
 // Create one machine
 router.post('', (req, res) => {
     const {
-        cityId,
+        CityId,
         ref,
         latitude,
         longitude,
@@ -69,7 +69,7 @@ router.post('', (req, res) => {
     } = req.body
 
     models.VendingMachine.create({
-        cityId,
+        CityId,
         ref,
         latitude,
         longitude,

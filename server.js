@@ -30,9 +30,9 @@ app.use('/locker', checkTokenMiddleware, router.locker)
 app.use('/status', checkTokenMiddleware, router.status)
 app.use('/product', checkTokenMiddleware, router.product)
 app.use('/producer', checkTokenMiddleware, router.producer)
-app.use('/matrixElement', checkTokenMiddleware, router.matrixElement)
-app.use('/vendingMachine', checkTokenMiddleware, router.vendingMachine)
-app.use('/productCategory', checkTokenMiddleware, router.productCategory)
+app.use('/matrixelement', checkTokenMiddleware, router.matrixElement)
+app.use('/vendingmachine', checkTokenMiddleware, router.vendingMachine)
+app.use('/productcategory', checkTokenMiddleware, router.productCategory)
 
 app.get('*', (req, res) => {
     res.status(501).send("Route not implemented")

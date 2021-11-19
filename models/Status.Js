@@ -22,6 +22,8 @@ const Status = db.define('Status', {
         allowNull: true,
         defaultValue: ""
     }
-})
+},
+    { paranoid: true }
+)
 
 module.exports = Status

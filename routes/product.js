@@ -59,7 +59,7 @@ router.get('/:id', (req, res) => {
 // Create one product
 router.post('', (req, res) => {
     const {
-        productCategoryId,
+        ProductCategoryId,
         name,
         ref,
         price,
@@ -67,7 +67,7 @@ router.post('', (req, res) => {
     } = req.body
 
     models.Product.create({
-        productCategoryId,
+        ProductCategoryId,
         name,
         ref,
         price,
