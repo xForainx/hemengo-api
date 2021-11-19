@@ -1,8 +1,11 @@
 // Import necessary modules
-const { DataTypes } = require('sequelize');
-const db = require('../db.config');
+const { DataTypes } = require('sequelize')
+const db = require('../db.config')
 
-// User model definition
+/**
+ * Status model definition.
+ * It is mostly about orders status but not only. 
+ */
 const Status = db.define('Status', {
     id: {
         type: DataTypes.INTEGER(11),
@@ -16,8 +19,9 @@ const Status = db.define('Status', {
     },
     message: {
         type: DataTypes.STRING(255),
+        allowNull: true,
         defaultValue: ""
     }
-});
+})
 
-module.exports = Status;
+module.exports = Status

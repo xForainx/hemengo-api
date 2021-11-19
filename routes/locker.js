@@ -7,16 +7,16 @@ let router = express.Router()
 // Logger middleware
 router.use((req, res, next) => {
     const event = new Date()
-    console.log("Attempted to access order ressource : ", event.toString())
+    console.log("Attempted to access locker ressource : ", event.toString())
     next()
 })
 
-// Routing of Order ressource
+// Routing of Locker ressource
 
-// Fetch all orders
+// Fetch all lockers
 router.get('', (req, res) => {
-    models.Order.findAll().then(orders => {
-        res.json({ orders })
+    models.Locker.findAll().then(lockers => {
+        res.json({ lockers })
     }).catch(err => {
         res.status(500).json({
             message: "database error",
@@ -26,27 +26,27 @@ router.get('', (req, res) => {
 })
 
 
-// Fetch one order
+// Fetch one locker by its id
 router.get('/:id', (req, res) => {
-    let orderId = req.params.id
+    let lockerId = req.params.id
 
-    if (!orderId) {
+    if (!lockerId) {
         return res.status(400).json({
             message: "missing parameter"
         })
     }
 
-    models.Order.findOne({
-        where: { id: orderId },
+    models.Locker.findOne({
+        where: { id: lockerId },
         raw: true
-    }).then(order => {
-        if (order === null) {
+    }).then(locker => {
+        if (locker === null) {
             return res.status(404).json({
-                message: "order does not exist"
+                message: "locker does not exist"
             })
         }
-        // Found order
-        return res.json({ order })
+        // Found locker
+        return res.json({ locker })
     }).catch(err => {
         res.status(500).json({
             message: "database error",
@@ -56,27 +56,23 @@ router.get('/:id', (req, res) => {
 })
 
 
-// Create one order
-// How can we get the price ? Passing an array of products and calculate ?
-// See Product-models.Order association table...
+// Create one locker
 router.post('', (req, res) => {
     const {
-        userId,
-        statusId,
-        vendingMachineId,
-        price,
-        pickupDate
+        isFull,
+        lastRefill,
+        nextPlannedRefill,
+        daysBeforeExpire
     } = req.body
 
-    models.Order.create({
-        userId,
-        statusId,
-        vendingMachineId,
-        price,
-        pickupDate
-    }).then(order => {
+    models.Locker.create({
+        isFull,
+        lastRefill,
+        nextPlannedRefill,
+        daysBeforeExpire
+    }).then(locker => {
         res.status(200).json({
-            message: "order created"
+            message: "locker created"
         })
     }).catch(err => {
         res.status(500).json({
@@ -87,31 +83,32 @@ router.post('', (req, res) => {
 })
 
 
-// Update one order
+// Update one locker
 router.patch('/:id', (req, res) => {
-    let orderId = parseInt(req.params.id)
+    let lockerId = parseInt(req.params.id)
 
-    if (!orderId) {
+    if (!lockerId) {
         return res.status(400).json({
             message: "missing parameter"
         })
     }
 
-    models.Order.findOne({
-        where: { id: orderId },
+    models.Locker.findOne({
+        where: { id: lockerId },
         raw: true
-    }).then(order => {
-        if (order === null) {
+    }).then(locker => {
+        // Check if locker exists
+        if (locker === null) {
             return res.status(404).json({
-                message: "order does not exists"
+                message: "locker does not exists"
             })
         }
 
-        models.Order.update(req.body, {
-            where: { id: orderId }
-        }).then(order => {
+        models.Locker.update(req.body, {
+            where: { id: lockerId }
+        }).then(locker => {
             res.json({
-                message: "order updated"
+                message: "locker updated"
             })
         }).catch(err => {
             res.status(500).json({
@@ -128,21 +125,21 @@ router.patch('/:id', (req, res) => {
 })
 
 
-// Restore one order
+// Restore one locker
 router.post('/untrash/:id', (req, res) => {
-    let orderId = parseInt(req.params.id)
+    let lockerId = parseInt(req.params.id)
 
-    if (!orderId) {
+    if (!lockerId) {
         return res.status(400).json({
             message: "missing parameter"
         })
     }
 
-    models.Order.restore({
-        where: { id: orderId }
+    models.Locker.restore({
+        where: { id: lockerId }
     }).then(() => {
         res.status(204).json({
-            message: "order restored"
+            message: "locker restored"
         })
     }).catch(err => {
         res.status(500).json({
@@ -153,21 +150,21 @@ router.post('/untrash/:id', (req, res) => {
 })
 
 
-// Soft delete one order
+// Soft delete one locker
 router.delete('/trash/:id', (req, res) => {
-    let orderId = parseInt(req.params.id)
+    let lockerId = parseInt(req.params.id)
 
-    if (!orderId) {
+    if (!lockerId) {
         return res.status(400).json({
             message: "missing parameter"
         })
     }
 
-    models.Order.destroy({
-        where: { id: orderId }
+    models.Locker.destroy({
+        where: { id: lockerId }
     }).then(() => {
         res.status(204).json({
-            message: "order softly deleted"
+            message: "locker softly deleted"
         })
     }).catch(err => {
         res.status(500).json({
@@ -178,23 +175,23 @@ router.delete('/trash/:id', (req, res) => {
 })
 
 
-// Delete one order
+// Delete one locker
 router.delete('/:id', (req, res) => {
-    let orderId = parseInt(req.params.id)
+    let lockerId = parseInt(req.params.id)
 
-    if (!orderId) {
+    if (!lockerId) {
         return res.status(400).json({
             message: "missing parameter"
         })
     }
 
-    // Forcing delete of order
-    models.Order.destroy({
-        where: { id: orderId },
+    // Forcing delete of locker
+    models.Locker.destroy({
+        where: { id: lockerId },
         force: true
     }).then(() => {
         res.status(204).json({
-            message: "order forcely deleted"
+            message: "locker forcely deleted"
         })
     }).catch(err => {
         res.status(500).json({

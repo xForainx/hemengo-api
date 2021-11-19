@@ -1,9 +1,13 @@
 // Import necessary modules
-const { DataTypes } = require('sequelize');
-const db = require('../db.config');
-const crypto = require('crypto');
+const { DataTypes } = require('sequelize')
+const db = require('../db.config')
+const crypto = require('crypto')
 
-// User model definition
+/**
+ * Vending machine model definition.
+ * It implements a FK cityId that points to cities.id (which gives us the city name, 
+ * postal code and insee code).
+ */
 const VendingMachine = db.define('VendingMachine', {
     id: {
         type: DataTypes.INTEGER(11),
@@ -13,11 +17,12 @@ const VendingMachine = db.define('VendingMachine', {
     uuid: {
         type: DataTypes.UUID,
         allowNull: false,
-        unique: true,
         defaultValue: crypto.randomUUID()
     },
     ref: {
-        type: DataTypes.STRING(255)
+        type: DataTypes.STRING(255),
+        allowNull: false,
+        defaultValue: "thx-1138"
     },
     latitude: {
         type: DataTypes.FLOAT,
@@ -27,20 +32,23 @@ const VendingMachine = db.define('VendingMachine', {
         type: DataTypes.FLOAT,
         allowNull: false
     },
-    address: {
+    street: {
         type: DataTypes.STRING(255),
-        defaultValue: ''
+        allowNull: true,
+        defaultValue: ""
     },
-    maxLines: {
+    maxLineCapacity: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
+        defaultValue: 6
     },
-    maxRows: {
+    maxRowCapacity: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
+        defaultValue: 5
     }
 },
     { paranoid: true }
-);
+)
 
-module.exports = VendingMachine;
+module.exports = VendingMachine

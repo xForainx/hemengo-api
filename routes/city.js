@@ -7,16 +7,16 @@ let router = express.Router()
 // Logger middleware
 router.use((req, res, next) => {
     const event = new Date()
-    console.log("Attempted to access order ressource : ", event.toString())
+    console.log("Attempted to access city ressource : ", event.toString())
     next()
 })
 
-// Routing of Order ressource
+// Routing of City ressource
 
-// Fetch all orders
+// Fetch all cities
 router.get('', (req, res) => {
-    models.Order.findAll().then(orders => {
-        res.json({ orders })
+    models.City.findAll().then(cities => {
+        res.json({ cities })
     }).catch(err => {
         res.status(500).json({
             message: "database error",
@@ -26,27 +26,27 @@ router.get('', (req, res) => {
 })
 
 
-// Fetch one order
+// Fetch one city by its id
 router.get('/:id', (req, res) => {
-    let orderId = req.params.id
+    let cityId = req.params.id
 
-    if (!orderId) {
+    if (!cityId) {
         return res.status(400).json({
             message: "missing parameter"
         })
     }
 
-    models.Order.findOne({
-        where: { id: orderId },
+    models.City.findOne({
+        where: { id: cityId },
         raw: true
-    }).then(order => {
-        if (order === null) {
+    }).then(city => {
+        if (city === null) {
             return res.status(404).json({
-                message: "order does not exist"
+                message: "city does not exist"
             })
         }
-        // Found order
-        return res.json({ order })
+        // Found city
+        return res.json({ city })
     }).catch(err => {
         res.status(500).json({
             message: "database error",
@@ -56,27 +56,21 @@ router.get('/:id', (req, res) => {
 })
 
 
-// Create one order
-// How can we get the price ? Passing an array of products and calculate ?
-// See Product-models.Order association table...
+// Create one city
 router.post('', (req, res) => {
     const {
-        userId,
-        statusId,
-        vendingMachineId,
-        price,
-        pickupDate
+        name,
+        postalCode,
+        inseeCode
     } = req.body
 
-    models.Order.create({
-        userId,
-        statusId,
-        vendingMachineId,
-        price,
-        pickupDate
-    }).then(order => {
+    models.City.create({
+        name,
+        postalCode,
+        inseeCode
+    }).then(city => {
         res.status(200).json({
-            message: "order created"
+            message: "city created"
         })
     }).catch(err => {
         res.status(500).json({
@@ -87,31 +81,31 @@ router.post('', (req, res) => {
 })
 
 
-// Update one order
+// Update one city
 router.patch('/:id', (req, res) => {
-    let orderId = parseInt(req.params.id)
+    let cityId = parseInt(req.params.id)
 
-    if (!orderId) {
+    if (!cityId) {
         return res.status(400).json({
             message: "missing parameter"
         })
     }
 
-    models.Order.findOne({
-        where: { id: orderId },
+    models.City.findOne({
+        where: { id: cityId },
         raw: true
-    }).then(order => {
-        if (order === null) {
+    }).then(city => {
+        if (city === null) {
             return res.status(404).json({
-                message: "order does not exists"
+                message: "city does not exists"
             })
         }
 
-        models.Order.update(req.body, {
-            where: { id: orderId }
-        }).then(order => {
+        models.City.update(req.body, {
+            where: { id: cityId }
+        }).then(city => {
             res.json({
-                message: "order updated"
+                message: "city updated"
             })
         }).catch(err => {
             res.status(500).json({
@@ -128,21 +122,21 @@ router.patch('/:id', (req, res) => {
 })
 
 
-// Restore one order
+// Restore one city
 router.post('/untrash/:id', (req, res) => {
-    let orderId = parseInt(req.params.id)
+    let cityId = parseInt(req.params.id)
 
-    if (!orderId) {
+    if (!cityId) {
         return res.status(400).json({
             message: "missing parameter"
         })
     }
 
-    models.Order.restore({
-        where: { id: orderId }
+    models.City.restore({
+        where: { id: cityId }
     }).then(() => {
         res.status(204).json({
-            message: "order restored"
+            message: "city restored"
         })
     }).catch(err => {
         res.status(500).json({
@@ -153,21 +147,21 @@ router.post('/untrash/:id', (req, res) => {
 })
 
 
-// Soft delete one order
+// Soft delete one city
 router.delete('/trash/:id', (req, res) => {
-    let orderId = parseInt(req.params.id)
+    let cityId = parseInt(req.params.id)
 
-    if (!orderId) {
+    if (!cityId) {
         return res.status(400).json({
             message: "missing parameter"
         })
     }
 
-    models.Order.destroy({
-        where: { id: orderId }
+    models.City.destroy({
+        where: { id: cityId }
     }).then(() => {
         res.status(204).json({
-            message: "order softly deleted"
+            message: "city softly deleted"
         })
     }).catch(err => {
         res.status(500).json({
@@ -178,23 +172,23 @@ router.delete('/trash/:id', (req, res) => {
 })
 
 
-// Delete one order
+// Delete one city
 router.delete('/:id', (req, res) => {
-    let orderId = parseInt(req.params.id)
+    let cityId = parseInt(req.params.id)
 
-    if (!orderId) {
+    if (!cityId) {
         return res.status(400).json({
             message: "missing parameter"
         })
     }
 
-    // Forcing delete of order
-    models.Order.destroy({
-        where: { id: orderId },
+    // Forcing delete of city
+    models.City.destroy({
+        where: { id: cityId },
         force: true
     }).then(() => {
         res.status(204).json({
-            message: "order forcely deleted"
+            message: "city forcely deleted"
         })
     }).catch(err => {
         res.status(500).json({

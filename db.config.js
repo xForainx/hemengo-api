@@ -1,5 +1,5 @@
 // Import necessary modules
-const { Sequelize } = require('sequelize');
+const { Sequelize } = require('sequelize')
 
 // ORM database connection
 let sequelize = new Sequelize(
@@ -12,11 +12,11 @@ let sequelize = new Sequelize(
         dialect: 'mariadb',
         logging: false
     }
-);
+)
 
 // Models synchronization
 sequelize.sync({ alter: true }, err => {
-    console.log("Database sync error", err);
-});
+    console.log("Database sync error", err)
+})
 
-module.exports = sequelize;
+module.exports = sequelize
