@@ -1,9 +1,11 @@
 // Import necessary modules
-const { DataTypes } = require('sequelize');
-const db = require('../db.config');
+const { DataTypes } = require('sequelize')
+const db = require('../db.config')
 
 /**
  * Producer model definition.
+ * It implements a FK cityId that points to cities.id (which gives us the city name, 
+ * postal code and insee code).
  */
 const Producer = db.define('Producer', {
     id: {
@@ -18,18 +20,21 @@ const Producer = db.define('Producer', {
     },
     presentation: {
         type: DataTypes.STRING(255),
-        defaultValue: ''
+        allowNull: true,
+        defaultValue: ""
     },
-    address: {
+    street: {
         type: DataTypes.STRING(255),
-        defaultValue: ''
+        allowNull: true,
+        defaultValue: ""
     },
     verified: {
         type: DataTypes.BOOLEAN,
+        allowNull: false,
         defaultValue: false
     }
 },
     { paranoid: true }
-);
+)
 
-module.exports = Producer;
+module.exports = Producer

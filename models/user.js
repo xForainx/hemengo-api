@@ -1,5 +1,5 @@
-const { DataTypes } = require('sequelize');
-const db = require('../db.config');
+const { DataTypes } = require('sequelize')
+const db = require('../db.config')
 
 /**
  * User model definition.
@@ -24,27 +24,32 @@ const User = db.define('User', {
         is: /^\w{8,}$/i
     },
     username: {
-        type: DataTypes.STRING(45),
-        defaultValue: ''
+        type: DataTypes.STRING(64),
+        allowNull: true,
+        defaultValue: ""
     },
     firstname: {
         type: DataTypes.STRING(255),
-        defaultValue: ''
+        allowNull: true,
+        defaultValue: ""
     },
     lastname: {
         type: DataTypes.STRING(255),
-        defaultValue: ''
+        allowNull: true,
+        defaultValue: ""
     },
     address: {
         type: DataTypes.STRING(255),
-        defaultValue: ''
+        allowNull: true,
+        defaultValue: ""
     },
     verified: {
         type: DataTypes.BOOLEAN,
+        allowNull: false,
         defaultValue: false
     }
 },
     { paranoid: true }
-);
+)
 
-module.exports = User;
+module.exports = User

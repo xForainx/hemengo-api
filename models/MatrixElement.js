@@ -1,6 +1,6 @@
 // Import necessary modules
-const { DataTypes } = require('sequelize');
-const db = require('../db.config');
+const { DataTypes } = require('sequelize')
+const db = require('../db.config')
 
 /**
  * Matrix element model definition.
@@ -20,10 +20,11 @@ const MatrixElement = db.define('MatrixElement', {
     },
     ref: {
         type: DataTypes.STRING(5),
-        allowNull: false
+        allowNull: false,
+        unique: true
     }
 },
     { paranoid: true }
-);
+)
 
-module.exports = MatrixElement;
+module.exports = MatrixElement

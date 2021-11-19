@@ -1,6 +1,6 @@
 // Import necessary modules
-const { DataTypes } = require('sequelize');
-const db = require('../db.config');
+const { DataTypes } = require('sequelize')
+const db = require('../db.config')
 
 /**
  * Vending machine's Locker model definition.
@@ -22,13 +22,16 @@ const Locker = db.define('Locker', {
     },
     isFull: {
         type: DataTypes.BOOLEAN,
-        allowNull: false
+        allowNull: false,
+        defaultValue: false
     },
     lastRefill: {
-        type: DataTypes.DATE
+        type: DataTypes.DATE,
+        allowNull: true,
     },
     nextPlannedRefill: {
-        type: DataTypes.DATE
+        type: DataTypes.DATE,
+        allowNull: true,
     },
     daysBeforeExpire: {
         type: DataTypes.INTEGER,
@@ -37,6 +40,6 @@ const Locker = db.define('Locker', {
     }
 },
     { paranoid: true }
-);
+)
 
-module.exports = Locker;
+module.exports = Locker

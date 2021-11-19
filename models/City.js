@@ -3,9 +3,9 @@ const { DataTypes } = require('sequelize')
 const db = require('../db.config')
 
 /**
- * Product category model definition.
+ * City model definition.
  */
-const ProductCategory = db.define('ProductCategory', {
+const City = db.define('City', {
     id: {
         type: DataTypes.INTEGER(11),
         primaryKey: true,
@@ -15,7 +15,17 @@ const ProductCategory = db.define('ProductCategory', {
         type: DataTypes.STRING(255),
         allowNull: false,
         unique: true
+    },
+    postalCode: {
+        type: DataTypes.STRING(6),
+        allowNull: false
+    },
+    inseeCode: {
+        type: DataTypes.STRING(6),
+        allowNull: false
     }
-})
+},
+    { paranoid: true }
+)
 
-module.exports = ProductCategory
+module.exports = City

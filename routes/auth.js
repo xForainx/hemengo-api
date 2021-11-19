@@ -1,29 +1,29 @@
-const express = require('express');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const models = require('../models/index');
+const express = require('express')
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+const models = require('../models/index')
 
 // Use Express router
-let router = express.Router();
+let router = express.Router()
 
 // Logger middleware
 router.use((req, res, next) => {
-    const event = new Date();
-    console.log("Attempted to authenticate : ", event.toString());
-    next();
-});
+    const event = new Date()
+    console.log("Attempted to authenticate : ", event.toString())
+    next()
+})
 
 // Routing of Auth ressource
 
 // Log in an existing user by its email and password
 // This route generate a jwt token if successful
 router.post('/login', (req, res) => {
-    const { email, password } = req.body;
+    const { email, password } = req.body
 
     if (!email || !password) {
         return res.status(400).json({
-            message: "Incorrect email or password"
-        });
+            message: "incorrect email or password"
+        })
     }
 
     models.User.findOne({
@@ -31,16 +31,16 @@ router.post('/login', (req, res) => {
     }).then(user => {
         if (user === null) {
             return res.status(401).json({
-                message: "Account does not exists"
-            });
+                message: "account does not exists"
+            })
         }
 
         // Password check
         bcrypt.compare(password, user.password).then(test => {
             if (!test) {
                 return res.status(401).json({
-                    message: "Incorrect password"
-                });
+                    message: "incorrect password"
+                })
             }
 
             // Generate token
@@ -49,35 +49,35 @@ router.post('/login', (req, res) => {
                 email: user.dataValues.email
             }, process.env.JWT_SECRET, {
                 expiresIn: process.env.JWT_DURING
-            });
+            })
 
             return res.json({
-                accessToken: token
-            });
+                token
+            })
         }).catch(err => {
             res.status(500).json({
-                message: "Login process failed",
+                message: "login process failed",
                 error: err
-            });
-        });
+            })
+        })
     }).catch(err => {
         res.status(500).json({
-            message: "Database error",
+            message: "database error",
             error: err
-        });
-    });
-});
+        })
+    })
+})
 
 
 // Registering (creating) a user with its email and password
 // This route generate a jwt token if successful
 router.post('/register', (req, res) => {
-    const { email, password } = req.body;
+    const { email, password } = req.body
 
     if (!email || !password) {
         return res.status(400).json({
-            message: "Incorrect email or password"
-        });
+            message: "incorrect email or password"
+        })
     }
 
     // Hashing and salting password
@@ -90,23 +90,23 @@ router.post('/register', (req, res) => {
                 email: user.dataValues.email
             }, process.env.JWT_SECRET, {
                 expiresIn: process.env.JWT_DURING
-            });
+            })
 
             return res.json({
-                accessToken: token
-            });
+                token
+            })
         }).catch(err => {
             res.status(500).json({
-                message: "Registering process failed",
+                message: "registering process failed",
                 error: err
-            });
-        });
+            })
+        })
     }).catch(err => {
         res.status(500).json({
-            message: "Hashing process failed",
+            message: "hashing process failed",
             error: err
-        });
-    });
-});
+        })
+    })
+})
 
-module.exports = router;
+module.exports = router

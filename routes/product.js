@@ -7,16 +7,16 @@ let router = express.Router()
 // Logger middleware
 router.use((req, res, next) => {
     const event = new Date()
-    console.log("Attempted to access order ressource : ", event.toString())
+    console.log("Attempted to access product ressource : ", event.toString())
     next()
 })
 
-// Routing of Order ressource
+// Routing of Product ressource
 
-// Fetch all orders
+// Fetch all products
 router.get('', (req, res) => {
-    models.Order.findAll().then(orders => {
-        res.json({ orders })
+    models.Product.findAll().then(products => {
+        res.json({ products })
     }).catch(err => {
         res.status(500).json({
             message: "database error",
@@ -26,27 +26,27 @@ router.get('', (req, res) => {
 })
 
 
-// Fetch one order
+// Fetch one product by its id
 router.get('/:id', (req, res) => {
-    let orderId = req.params.id
+    let productId = req.params.id
 
-    if (!orderId) {
+    if (!productId) {
         return res.status(400).json({
             message: "missing parameter"
         })
     }
 
-    models.Order.findOne({
-        where: { id: orderId },
+    models.Product.findOne({
+        where: { id: productId },
         raw: true
-    }).then(order => {
-        if (order === null) {
+    }).then(product => {
+        if (product === null) {
             return res.status(404).json({
-                message: "order does not exist"
+                message: "product does not exist"
             })
         }
-        // Found order
-        return res.json({ order })
+        // Found product
+        return res.json({ product })
     }).catch(err => {
         res.status(500).json({
             message: "database error",
@@ -56,27 +56,25 @@ router.get('/:id', (req, res) => {
 })
 
 
-// Create one order
-// How can we get the price ? Passing an array of products and calculate ?
-// See Product-models.Order association table...
+// Create one product
 router.post('', (req, res) => {
     const {
-        userId,
-        statusId,
-        vendingMachineId,
+        productCategoryId,
+        name,
+        ref,
         price,
-        pickupDate
+        daysBeforeExpire
     } = req.body
 
-    models.Order.create({
-        userId,
-        statusId,
-        vendingMachineId,
+    models.Product.create({
+        productCategoryId,
+        name,
+        ref,
         price,
-        pickupDate
-    }).then(order => {
+        daysBeforeExpire
+    }).then(product => {
         res.status(200).json({
-            message: "order created"
+            message: "product created"
         })
     }).catch(err => {
         res.status(500).json({
@@ -87,31 +85,31 @@ router.post('', (req, res) => {
 })
 
 
-// Update one order
+// Update one product
 router.patch('/:id', (req, res) => {
-    let orderId = parseInt(req.params.id)
+    let productId = parseInt(req.params.id)
 
-    if (!orderId) {
+    if (!productId) {
         return res.status(400).json({
             message: "missing parameter"
         })
     }
 
-    models.Order.findOne({
-        where: { id: orderId },
+    models.Product.findOne({
+        where: { id: productId },
         raw: true
-    }).then(order => {
-        if (order === null) {
+    }).then(product => {
+        if (product === null) {
             return res.status(404).json({
-                message: "order does not exists"
+                message: "product does not exists"
             })
         }
 
-        models.Order.update(req.body, {
-            where: { id: orderId }
-        }).then(order => {
+        models.Product.update(req.body, {
+            where: { id: productId }
+        }).then(product => {
             res.json({
-                message: "order updated"
+                message: "product updated"
             })
         }).catch(err => {
             res.status(500).json({
@@ -128,21 +126,21 @@ router.patch('/:id', (req, res) => {
 })
 
 
-// Restore one order
+// Restore one product
 router.post('/untrash/:id', (req, res) => {
-    let orderId = parseInt(req.params.id)
+    let productId = parseInt(req.params.id)
 
-    if (!orderId) {
+    if (!productId) {
         return res.status(400).json({
             message: "missing parameter"
         })
     }
 
-    models.Order.restore({
-        where: { id: orderId }
+    models.Product.restore({
+        where: { id: productId }
     }).then(() => {
         res.status(204).json({
-            message: "order restored"
+            message: "product restored"
         })
     }).catch(err => {
         res.status(500).json({
@@ -153,21 +151,21 @@ router.post('/untrash/:id', (req, res) => {
 })
 
 
-// Soft delete one order
+// Soft delete one product
 router.delete('/trash/:id', (req, res) => {
-    let orderId = parseInt(req.params.id)
+    let productId = parseInt(req.params.id)
 
-    if (!orderId) {
+    if (!productId) {
         return res.status(400).json({
             message: "missing parameter"
         })
     }
 
-    models.Order.destroy({
-        where: { id: orderId }
+    models.Product.destroy({
+        where: { id: productId }
     }).then(() => {
         res.status(204).json({
-            message: "order softly deleted"
+            message: "product softly deleted"
         })
     }).catch(err => {
         res.status(500).json({
@@ -178,23 +176,23 @@ router.delete('/trash/:id', (req, res) => {
 })
 
 
-// Delete one order
+// Delete one product
 router.delete('/:id', (req, res) => {
-    let orderId = parseInt(req.params.id)
+    let productId = parseInt(req.params.id)
 
-    if (!orderId) {
+    if (!productId) {
         return res.status(400).json({
             message: "missing parameter"
         })
     }
 
-    // Forcing delete of order
-    models.Order.destroy({
-        where: { id: orderId },
+    // Forcing delete of product
+    models.Product.destroy({
+        where: { id: productId },
         force: true
     }).then(() => {
         res.status(204).json({
-            message: "order forcely deleted"
+            message: "product forcely deleted"
         })
     }).catch(err => {
         res.status(500).json({

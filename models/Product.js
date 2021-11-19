@@ -1,6 +1,6 @@
 // Import necessary modules
-const { DataTypes } = require('sequelize');
-const db = require('../db.config');
+const { DataTypes } = require('sequelize')
+const db = require('../db.config')
 
 /**
  * Product model definition.
@@ -33,6 +33,6 @@ const Product = db.define('Product', {
     }
 },
     { paranoid: true }
-);
+)
 
-module.exports = Product;
+module.exports = Product

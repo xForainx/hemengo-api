@@ -1,39 +1,39 @@
-const express = require('express');
-const models = require('../models/index');
+const express = require('express')
+const models = require('../models/index')
 
 // Use Express router
-let router = express.Router();
+let router = express.Router()
 
 // Logger middleware
 router.use((req, res, next) => {
-    const event = new Date();
-    console.log("Attempted to access producer ressource : ", event.toString());
-    next();
-});
+    const event = new Date()
+    console.log("Attempted to access producer ressource : ", event.toString())
+    next()
+})
 
 // Routing of Producer ressource
 
 // Fetch all producers
 router.get('', (req, res) => {
     models.Producer.findAll().then(producers => {
-        res.json({ producers });
+        res.json({ producers })
     }).catch(err => {
         res.status(500).json({
-            message: "Database error",
+            message: "database error",
             error: err
-        });
-    });
-});
+        })
+    })
+})
 
 
-// Fetch one producer
+// Fetch one producer by its id
 router.get('/:id', (req, res) => {
-    let producerId = req.params.id;
+    let producerId = req.params.id
 
     if (!producerId) {
         return res.status(400).json({
-            message: "Missing parameter"
-        });
+            message: "missing parameter"
+        })
     }
 
     models.Producer.findOne({
@@ -42,106 +42,113 @@ router.get('/:id', (req, res) => {
     }).then(producer => {
         if (producer === null) {
             return res.status(404).json({
-                message: "Producer does not exist"
-            });
+                message: "producer does not exist"
+            })
         }
         // Found producer
-        return res.json({ producer });
+        return res.json({ producer })
     }).catch(err => {
         res.status(500).json({
-            message: "Database error",
+            message: "database error",
             error: err
-        });
-    });
-});
+        })
+    })
+})
 
 
 // Create one producer
 router.post('', (req, res) => {
-    const { name, presentation, address } = req.body;
+    const {
+        cityId,
+        name,
+        presentation,
+        street,
+        verified
+    } = req.body
 
     models.Producer.create({
-        name: name,
-        presentation: presentation,
-        address: address
+        cityId,
+        name,
+        presentation,
+        street,
+        verified
     }).then(producer => {
         res.status(200).json({
-            message: "Producer created"
-        });
+            message: "producer created"
+        })
     }).catch(err => {
         res.status(500).json({
-            message: "Database error",
+            message: "database error",
             error: err
-        });
-    });
-});
+        })
+    })
+})
 
 
 // Update one producer
 router.patch('/:id', (req, res) => {
-    let producerId = parseInt(req.params.id);
+    let producerId = parseInt(req.params.id)
 
     if (!producerId) {
         return res.status(400).json({
-            message: "Missing parameter"
-        });
+            message: "missing parameter"
+        })
     }
 
     models.Producer.findOne({
         where: { id: producerId },
         raw: true
     }).then(producer => {
-        // Check if producer exists
         if (producer === null) {
             return res.status(404).json({
-                message: "Producer does not exists"
-            });
+                message: "producer does not exists"
+            })
         }
 
         models.Producer.update(req.body, {
             where: { id: producerId }
         }).then(producer => {
             res.json({
-                message: "Producer updated"
-            });
+                message: "producer updated"
+            })
         }).catch(err => {
             res.status(500).json({
-                message: "Database error",
+                message: "database error",
                 error: err
-            });
-        });
+            })
+        })
     }).catch(err => {
         res.status(500).json({
-            message: "Database error",
+            message: "database error",
             error: err
-        });
-    });
-});
+        })
+    })
+})
 
 
 // Restore one producer
 router.post('/untrash/:id', (req, res) => {
-    let producerId = parseInt(req.params.id);
+    let producerId = parseInt(req.params.id)
 
     if (!producerId) {
         return res.status(400).json({
-            message: "Missing parameter"
-        });
+            message: "missing parameter"
+        })
     }
 
     models.Producer.restore({
         where: { id: producerId }
     }).then(() => {
         res.status(204).json({
-            message: "Producer restored"
-        });
+            message: "producer restored"
+        })
     }).catch(err => {
         res.status(500).json({
-            message: "Database error",
+            message: "database error",
             error: err
-        });
-    });
-});
+        })
+    })
+})
 
 
 // Soft delete one producer
@@ -150,23 +157,23 @@ router.delete('/trash/:id', (req, res) => {
 
     if (!producerId) {
         return res.status(400).json({
-            message: "Missing parameter"
-        });
+            message: "missing parameter"
+        })
     }
 
     models.Producer.destroy({
         where: { id: producerId }
     }).then(() => {
         res.status(204).json({
-            message: "Producer softly deleted"
-        });
+            message: "producer softly deleted"
+        })
     }).catch(err => {
         res.status(500).json({
-            message: "Database error",
+            message: "database error",
             error: err
-        });
-    });
-});
+        })
+    })
+})
 
 
 // Delete one producer
@@ -175,8 +182,8 @@ router.delete('/:id', (req, res) => {
 
     if (!producerId) {
         return res.status(400).json({
-            message: "Missing parameter"
-        });
+            message: "missing parameter"
+        })
     }
 
     // Forcing delete of producer
@@ -185,14 +192,14 @@ router.delete('/:id', (req, res) => {
         force: true
     }).then(() => {
         res.status(204).json({
-            message: "Producer forcely deleted"
-        });
+            message: "producer forcely deleted"
+        })
     }).catch(err => {
         res.status(500).json({
-            message: "Database error",
+            message: "database error",
             error: err
-        });
-    });
-});
+        })
+    })
+})
 
-module.exports = router;
+module.exports = router
