@@ -17,7 +17,6 @@ const VendingMachine = db.define('VendingMachine', {
     uuid: {
         type: DataTypes.UUID,
         allowNull: false,
-        unique: true,
         defaultValue: crypto.randomUUID()
     },
     ref: {
