@@ -59,6 +59,8 @@ router.get('/:id', (req, res) => {
 // Create one locker
 router.post('', (req, res) => {
     const {
+        ProductId,
+        MatrixElementId,
         isFull,
         lastRefill,
         nextPlannedRefill,
@@ -66,6 +68,8 @@ router.post('', (req, res) => {
     } = req.body
 
     models.Locker.create({
+        ProductId,
+        MatrixElementId,
         isFull,
         lastRefill,
         nextPlannedRefill,
