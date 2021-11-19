@@ -63,8 +63,7 @@ router.post('', (req, res) => {
         MatrixElementId,
         isFull,
         lastRefill,
-        nextPlannedRefill,
-        daysBeforeExpire
+        nextPlannedRefill
     } = req.body
 
     models.Locker.create({
@@ -72,8 +71,7 @@ router.post('', (req, res) => {
         MatrixElementId,
         isFull,
         lastRefill,
-        nextPlannedRefill,
-        daysBeforeExpire
+        nextPlannedRefill
     }).then(locker => {
         res.status(200).json({
             message: "locker created"

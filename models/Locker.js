@@ -32,11 +32,6 @@ const Locker = db.define('Locker', {
     nextPlannedRefill: {
         type: DataTypes.DATE,
         allowNull: true,
-    },
-    daysBeforeExpire: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        defaultValue: 1
     }
 },
     { paranoid: true }
