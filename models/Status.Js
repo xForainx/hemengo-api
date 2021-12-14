@@ -15,7 +15,7 @@ const Status = db.define('Status', {
     name: {
         type: DataTypes.STRING(64),
         allowNull: false,
-        unique: true
+        indexes: [{ unique: true, fields: ["name"] }]
     },
     message: {
         type: DataTypes.STRING(255),

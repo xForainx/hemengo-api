@@ -15,12 +15,12 @@ const Product = db.define('Product', {
     name: {
         type: DataTypes.STRING(255),
         allowNull: false,
-        unique: true
+        indexes: [{ unique: true, fields: ["name"] }]
     },
     ref: {
         type: DataTypes.STRING(255),
         allowNull: false,
-        unique: true
+        indexes: [{ unique: true, fields: ["ref"] }]
     },
     price: {
         type: DataTypes.DOUBLE,

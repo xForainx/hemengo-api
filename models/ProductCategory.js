@@ -14,7 +14,7 @@ const ProductCategory = db.define('ProductCategory', {
     name: {
         type: DataTypes.STRING(255),
         allowNull: false,
-        unique: true
+        indexes: [{ unique: true, fields: ["name"] }]
     }
 },
     { paranoid: true }
