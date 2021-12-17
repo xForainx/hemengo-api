@@ -13,7 +13,7 @@ const User = db.define('User', {
     email: {
         type: DataTypes.STRING(255),
         allowNull: false,
-        unique: true,
+        indexes: [{ unique: true, fields: ["email"] }],
         validate: {
             isEmail: true
         }

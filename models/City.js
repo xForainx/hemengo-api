@@ -14,7 +14,7 @@ const City = db.define('City', {
     name: {
         type: DataTypes.STRING(255),
         allowNull: false,
-        unique: true
+        indexes: [{ unique: true, fields: ["name"] }]
     },
     postalCode: {
         type: DataTypes.STRING(6),

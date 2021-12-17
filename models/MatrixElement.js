@@ -21,7 +21,7 @@ const MatrixElement = db.define('MatrixElement', {
     ref: {
         type: DataTypes.STRING(5),
         allowNull: false,
-        unique: true
+        indexes: [{ unique: true, fields: ["ref"] }]
     }
 },
     { paranoid: true }
