@@ -44,7 +44,7 @@ router.post('/login', (req, res) => {
             }
 
             // Generate token
-            const token = jwt.sign({
+            const accessToken = jwt.sign({
                 id: user.dataValues.id,
                 email: user.dataValues.email
             }, process.env.JWT_SECRET, {
@@ -52,7 +52,7 @@ router.post('/login', (req, res) => {
             })
 
             return res.json({
-                token
+                accessToken
             })
         }).catch(err => {
             res.status(500).json({
@@ -85,7 +85,7 @@ router.post('/register', (req, res) => {
         // Creating user
         models.User.create({ email: email, password: hash }).then(user => {
             // Generate token
-            const token = jwt.sign({
+            const accessToken = jwt.sign({
                 id: user.dataValues.id,
                 email: user.dataValues.email
             }, process.env.JWT_SECRET, {
@@ -93,7 +93,7 @@ router.post('/register', (req, res) => {
             })
 
             return res.json({
-                token
+                accessToken
             })
         }).catch(err => {
             res.status(500).json({
