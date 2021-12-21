@@ -1,5 +1,6 @@
 const express = require('express')
 const models = require('../models/index')
+const crypto = require('crypto')
 
 // Use Express router
 let router = express.Router()
@@ -99,6 +100,7 @@ router.post('', (req, res) => {
 
     models.VendingMachine.create({
         CityId,
+        uuid:crypto.randomUUID(),
         ref,
         latitude,
         longitude,
