@@ -1,7 +1,6 @@
 // Import necessary modules
 const { DataTypes } = require('sequelize')
 const db = require('../db.config')
-const crypto = require('crypto')
 
 /**
  * Vending machine model definition.
@@ -17,7 +16,6 @@ const VendingMachine = db.define('VendingMachine', {
     uuid: {
         type: DataTypes.UUID,
         allowNull: false,
-        defaultValue: crypto.randomUUID()
     },
     ref: {
         type: DataTypes.STRING(255),

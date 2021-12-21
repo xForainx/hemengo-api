@@ -1,5 +1,6 @@
 const express = require('express')
 const models = require('../models/index')
+const crypto = require('crypto')
 
 // Use Express router
 let router = express.Router()
@@ -55,6 +56,35 @@ router.get('/:uuid', (req, res) => {
     })
 })
 
+// Fetch one machine by its id
+router.get('/id/:id', (req, res) => {
+    let machineId = req.params.id
+
+    if (!machineId) {
+        return res.status(400).json({
+            message: "missing parameter"
+        })
+    }
+
+    models.VendingMachine.findOne({
+        where: { id: machineId },
+        raw: true
+    }).then(machine => {
+        if (machine === null) {
+            return res.status(404).json({
+                message: "machine does not exist"
+            })
+        }
+        // Found machine
+        return res.json({ machine })
+    }).catch(err => {
+        res.status(500).json({
+            message: "database error",
+            error: err
+        })
+    })
+})
+
 
 // Create one machine
 router.post('', (req, res) => {
@@ -70,6 +100,7 @@ router.post('', (req, res) => {
 
     models.VendingMachine.create({
         CityId,
+        uuid:crypto.randomUUID(),
         ref,
         latitude,
         longitude,
