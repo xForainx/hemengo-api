@@ -48,7 +48,7 @@ router.get('/:id', (req, res) => {
             })
         }
         // Found user
-        return res.json({ data: user })
+        return res.json({ user })
     }).catch(err => {
         res.status(500).json({
             message: "database error",
