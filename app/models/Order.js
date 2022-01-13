@@ -23,7 +23,9 @@ const Order = db.define('Order', {
         allowNull: false
     }
 },
-    { paranoid: true }
+    { 
+        paranoid: true 
+    }
 );
 
 module.exports = Order;

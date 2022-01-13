@@ -13,8 +13,7 @@ const City = db.define('City', {
     },
     name: {
         type: DataTypes.STRING(255),
-        allowNull: false,
-        indexes: [{ unique: true, fields: ["name"] }]
+        allowNull: false
     },
     postalCode: {
         type: DataTypes.STRING(6),
@@ -25,7 +24,10 @@ const City = db.define('City', {
         allowNull: false
     }
 },
-    { paranoid: true }
+    {
+        paranoid: true,
+        indexes: [{ unique: true, fields: ["name"] }]
+    }
 )
 
 module.exports = City

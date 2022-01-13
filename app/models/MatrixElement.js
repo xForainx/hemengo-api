@@ -20,11 +20,13 @@ const MatrixElement = db.define('MatrixElement', {
     },
     ref: {
         type: DataTypes.STRING(5),
-        allowNull: false,
-        indexes: [{ unique: true, fields: ["ref"] }]
+        allowNull: false
     }
 },
-    { paranoid: true }
+    { 
+        paranoid: true,
+        indexes: [{ unique: true, fields: ["ref"] }]
+    }
 )
 
 module.exports = MatrixElement

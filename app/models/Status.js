@@ -14,8 +14,7 @@ const Status = db.define('Status', {
     },
     name: {
         type: DataTypes.STRING(64),
-        allowNull: false,
-        indexes: [{ unique: true, fields: ["name"] }]
+        allowNull: false
     },
     message: {
         type: DataTypes.STRING(255),
@@ -23,7 +22,10 @@ const Status = db.define('Status', {
         defaultValue: ""
     }
 },
-    { paranoid: true }
+    {
+        paranoid: true,
+        indexes: [{ unique: true, fields: ["name"] }]
+    }
 )
 
 module.exports = Status

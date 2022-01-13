@@ -15,8 +15,7 @@ const Producer = db.define('Producer', {
     },
     name: {
         type: DataTypes.STRING(255),
-        allowNull: false,
-        indexes: [{ unique: true, fields: ["name"] }]
+        allowNull: false
     },
     presentation: {
         type: DataTypes.STRING(255),
@@ -34,7 +33,10 @@ const Producer = db.define('Producer', {
         defaultValue: false
     }
 },
-    { paranoid: true }
+    { 
+        paranoid: true,
+        indexes: [{ unique: true, fields: ["name"] }]
+    }
 )
 
 module.exports = Producer

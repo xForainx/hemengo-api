@@ -14,13 +14,12 @@ const Product = db.define('Product', {
     },
     name: {
         type: DataTypes.STRING(255),
-        allowNull: false,
-        indexes: [{ unique: true, fields: ["name"] }]
+        allowNull: false
+
     },
     ref: {
         type: DataTypes.STRING(255),
-        allowNull: false,
-        indexes: [{ unique: true, fields: ["ref"] }]
+        allowNull: false
     },
     price: {
         type: DataTypes.DOUBLE,
@@ -32,7 +31,10 @@ const Product = db.define('Product', {
         defaultValue: 1
     }
 },
-    { paranoid: true }
+    {
+        paranoid: true,
+        indexes: [{ unique: true, fields: ["name", "ref"] }]
+    }
 )
 
 module.exports = Product
