@@ -15,7 +15,7 @@ const VendingMachine = db.define('VendingMachine', {
     },
     uuid: {
         type: DataTypes.UUID,
-        allowNull: false,
+        allowNull: false
     },
     ref: {
         type: DataTypes.STRING(255),
@@ -46,7 +46,9 @@ const VendingMachine = db.define('VendingMachine', {
         defaultValue: 5
     }
 },
-    { paranoid: true }
+    {
+        paranoid: true
+    }
 )
 
 module.exports = VendingMachine

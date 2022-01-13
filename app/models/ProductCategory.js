@@ -13,11 +13,13 @@ const ProductCategory = db.define('ProductCategory', {
     },
     name: {
         type: DataTypes.STRING(255),
-        allowNull: false,
-        indexes: [{ unique: true, fields: ["name"] }]
+        allowNull: false
     }
 },
-    { paranoid: true }
+    { 
+        paranoid: true,
+        indexes: [{ unique: true, fields: ["name"] }] 
+    }
 )
 
 module.exports = ProductCategory

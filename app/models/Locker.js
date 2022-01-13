@@ -27,14 +27,16 @@ const Locker = db.define('Locker', {
     },
     lastRefill: {
         type: DataTypes.DATE,
-        allowNull: true,
+        allowNull: true
     },
     nextPlannedRefill: {
         type: DataTypes.DATE,
-        allowNull: true,
+        allowNull: true
     }
 },
-    { paranoid: true }
+    {
+        paranoid: true
+    }
 )
 
 module.exports = Locker
