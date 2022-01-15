@@ -13,7 +13,7 @@ router.use((req, res, next) => {
 
 // Routing of Order ressource
 
-// Fetch all orders
+// Fetch all orders of everyone
 router.get('', (req, res) => {
     models.Order.findAll().then(orders => {
         res.json({ orders })
@@ -26,7 +26,7 @@ router.get('', (req, res) => {
 })
 
 
-// Fetch one order
+// Fetch one order by its primary key (id)
 router.get('/:id', (req, res) => {
     let orderId = req.params.id
 
@@ -45,8 +45,46 @@ router.get('/:id', (req, res) => {
                 message: "order does not exist"
             })
         }
+
         // Found order
-        return res.json({ order })
+        return res.json({
+            order
+        })
+
+    }).catch(err => {
+        res.status(500).json({
+            message: "database error",
+            error: err
+        })
+    })
+})
+
+
+// Fetch all orders by UserId (all orders of a given user)
+router.get('/user/:id', (req, res) => {
+    let userId = req.params.id
+
+    if (!userId) {
+        return res.status(400).json({
+            message: "missing parameter"
+        })
+    }
+
+    models.Order.findAll({
+        where: { UserId: userId },
+        raw: true
+    }).then(orders => {
+        if (orders === null) {
+            return res.status(404).json({
+                message: "no orders for this user"
+            })
+        }
+
+        // Found orders
+        return res.json({
+            orders
+        })
+
     }).catch(err => {
         res.status(500).json({
             message: "database error",
