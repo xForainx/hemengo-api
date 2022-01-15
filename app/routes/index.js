@@ -9,6 +9,7 @@ const vendingMachine        = require('./vendingMachine')
 const productCategory       = require('./productCategory')
 const producer              = require('./producer')
 const city                  = require('./city')
+const upload                = require('./upload')
 
 module.exports = {
     auth,
@@ -21,5 +22,6 @@ module.exports = {
     vendingMachine,
     productCategory,
     producer,
-    city
+    city,
+    upload
 }

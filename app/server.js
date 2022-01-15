@@ -22,6 +22,8 @@ app.get('/', (req, res) => {
     res.send("Welcome to the Hemengo Distrib API")
 })
 
+app.use('/upload', router.upload)
+
 app.use('/auth', router.auth)
 app.use('/city', checkTokenMiddleware, router.city)
 app.use('/user', checkTokenMiddleware, router.user)
