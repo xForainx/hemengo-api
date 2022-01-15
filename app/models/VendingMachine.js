@@ -44,6 +44,10 @@ const VendingMachine = db.define('VendingMachine', {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 5
+    },
+    qrCodeFileName: {
+        type: DataTypes.STRING(255),
+        allowNull: true
     }
 },
     {
