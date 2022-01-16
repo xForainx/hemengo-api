@@ -1,6 +1,7 @@
 const express = require('express')
 const models = require('../models/index')
 const crypto = require('crypto')
+const QRCode = require('qrcode')
 
 // Use Express router
 let router = express.Router()
@@ -98,19 +99,34 @@ router.post('', (req, res) => {
         maxRowCapacity
     } = req.body
 
+    const machineUuid = crypto.randomUUID();
+    const qrCodeFileName = `${machineUuid}.png`;
+
     models.VendingMachine.create({
         CityId,
-        uuid:crypto.randomUUID(),
+        uuid: machineUuid,
         ref,
         latitude,
         longitude,
         street,
         maxLineCapacity,
-        maxRowCapacity
+        maxRowCapacity,
+        qrCodeFileName
     }).then(machine => {
+
+        // Creation of QRCode with uuid payload inside and saving it to a png file
+        QRCode.toFile(`public/upload/qrcodes/${qrCodeFileName}`, machineUuid, {
+            // Black (default) on transparent background
+            color: { light: '#0000' }
+        }, function (err) {
+            if (err) console.log(err)
+            console.log("QRCode successfully created")
+        })
+
         res.status(200).json({
             message: "vending machine created"
         })
+
     }).catch(err => {
         res.status(500).json({
             message: "database error",
