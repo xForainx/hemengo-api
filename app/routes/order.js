@@ -35,7 +35,7 @@ router.get('', (req, res) => {
 })
 
 
-// Fetch one order by its primary key (id)
+// Fetch one order by primary key (id)
 router.get('/:id', (req, res) => {
     let orderId = req.params.id
 
@@ -57,6 +57,48 @@ router.get('/:id', (req, res) => {
 
         // Found order
         return res.json({ order })
+
+    }).catch(err => {
+        res.status(500).json({
+            message: "database error",
+            error: err
+        })
+    })
+})
+
+
+// Fetch the products of an order
+router.get('/:id/products', (req, res) => {
+    let orderId = req.params.id
+
+    if (!orderId) {
+        return res.status(400).json({
+            message: "missing parameter"
+        })
+    }
+
+    models.Order.findByPk(orderId).then(order => {
+        if (order === null) {
+            return res.status(404).json({
+                message: "order does not exist"
+            })
+        }
+
+        order.getProducts().then(products => {
+            if (products === null) {
+                return res.status(404).json({
+                    message: "no products exist for the order"
+                })
+            }
+
+            return res.json({ products })
+
+        }).catch(err => {
+            res.status(500).json({
+                message: "unable to get order product(s)",
+                error: err
+            })
+        })
 
     }).catch(err => {
         res.status(500).json({
@@ -123,9 +165,14 @@ router.post('', (req, res) => {
             })
         }).catch(err => {
             res.status(500).json({
-                message: "database error",
+                message: "unable to create order",
                 error: err
             })
+        })
+    }).catch(err => {
+        res.status(500).json({
+            message: "unable to calculate price of order",
+            error: err
         })
     })
 })
