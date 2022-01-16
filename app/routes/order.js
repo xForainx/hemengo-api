@@ -16,7 +16,16 @@ router.use((req, res, next) => {
 // Fetch all orders of everyone
 router.get('', (req, res) => {
     models.Order.findAll().then(orders => {
-        res.json({ orders })
+
+        if (orders === null) {
+            return res.status(404).json({
+                message: "no orders found"
+            })
+        }
+
+        // Found orders
+        return res.json({ orders })
+
     }).catch(err => {
         res.status(500).json({
             message: "database error",
@@ -47,9 +56,7 @@ router.get('/:id', (req, res) => {
         }
 
         // Found order
-        return res.json({
-            order
-        })
+        return res.json({ order })
 
     }).catch(err => {
         res.status(500).json({
@@ -80,10 +87,8 @@ router.get('/user/:id', (req, res) => {
             })
         }
 
-        // Found orders
-        return res.json({
-            orders
-        })
+        // Found user's orders
+        return res.json({ orders })
 
     }).catch(err => {
         res.status(500).json({
@@ -95,31 +100,32 @@ router.get('/user/:id', (req, res) => {
 
 
 // Create one order
-// How can we get the price ? Passing an array of products and calculate ?
-// See Product-Order association table...
 router.post('', (req, res) => {
-    const {
-        UserId,
-        StatusId,
-        VendingMachineId,
-        price,
-        pickupDate
-    } = req.body
+    const { UserId, StatusId, VendingMachineId, pickupDate, products } = req.body
 
-    models.Order.create({
-        UserId,
-        StatusId,
-        VendingMachineId,
-        price,
-        pickupDate
-    }).then(order => {
-        res.status(200).json({
-            message: "order created"
-        })
-    }).catch(err => {
-        res.status(500).json({
-            message: "database error",
-            error: err
+    // Sum the price of every products of the incoming order
+    models.Product.sum('price', {
+        where: { id: products }
+    }).then((calculatedPrice) => {
+        // We can create the order with its total price previously calculated
+        models.Order.create({
+            UserId,
+            StatusId,
+            VendingMachineId,
+            pickupDate,
+            price: calculatedPrice
+        }).then(order => {
+            // Insert into order_product association table with sequelize mixin
+            order.addProducts(products).then(() => {
+                res.status(200).json({
+                    message: "order created"
+                })
+            })
+        }).catch(err => {
+            res.status(500).json({
+                message: "database error",
+                error: err
+            })
         })
     })
 })
