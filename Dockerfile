@@ -7,14 +7,17 @@ FROM node:16
 # Create a hemengo-api directory inside root (/) of the container
 # and copy everything that's here (app folder, package.json...) 
 # to this new directory
-COPY . /hemengo-api 
+# COPY . /hemengo-api 
 
 # Go to this new directory
 WORKDIR /hemengo-api
 
+COPY package.json ./
+COPY . .
+
 RUN npm install
 
 EXPOSE 3000
-EXPOSE 3306
+# EXPOSE 3306
 
 CMD npm run dev
