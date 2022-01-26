@@ -18,6 +18,5 @@ COPY . .
 RUN npm install
 
 EXPOSE 3000
-# EXPOSE 3306
 
 CMD npm run dev

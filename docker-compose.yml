@@ -1,3 +1,6 @@
+# Warning: the .env file feature only works when you use the "docker-compose up" 
+# command and does not work with docker stack deploy.
+
 version: '3'
 services:
   hemengo-api:
@@ -7,27 +10,27 @@ services:
     ports:
       - 3000:3000
     environment:
-      SERVER_PORT: 3000
-      DB_HOST: mariadb
-      DB_PORT: 3306
-      DB_NAME: hemengo_distrib
-      DB_USER: toto
-      DB_PASS: toto
-      JWT_SECRET: 0c4d9339b5dd1840d95dee
-      JWT_DURING: 2 days
-      BCRYPT_SALT_ROUND: 10
+      SERVER_PORT: $SERVER_PORT
+      DB_HOST: $DB_SGBD
+      DB_PORT: $DB_PORT
+      DB_NAME: $DB_NAME
+      DB_USER: $DB_USER
+      DB_PASS: $DB_PASS
+      JWT_SECRET: $JWT_SECRET
+      JWT_DURING: $JWT_DURING
+      BCRYPT_SALT_ROUND: $BCRYPT_SALT_ROUND
     depends_on:
       - mariadb
-  
+
   mariadb:
     image: mariadb
     container_name: "mariadb"
-    ports: 
+    ports:
       - 3306:3306
-    environment: 
-      MYSQL_DATABASE: hemengo_distrib
-      MYSQL_USER: toto
-      MYSQL_PASSWORD: toto
-      MYSQL_ROOT_PASSWORD: root
+    environment:
+      MYSQL_DATABASE: $DB_NAME
+      MYSQL_USER: $DB_USER
+      MYSQL_PASSWORD: $DB_PASS
+      MYSQL_ROOT_PASSWORD: $DB_ROOT_PASS
     volumes:
       - ../data:/var/lib/mysql
