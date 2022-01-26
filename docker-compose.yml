@@ -1,0 +1,33 @@
+version: '3'
+services:
+  hemengo-api:
+    image: hemengo-api:latest
+    container_name: "hemengo-api"
+    build: .
+    ports:
+      - 3000:3000
+    environment:
+      SERVER_PORT: 3000
+      DB_HOST: mariadb
+      DB_PORT: 3306
+      DB_NAME: hemengo_distrib
+      DB_USER: toto
+      DB_PASS: toto
+      JWT_SECRET: 0c4d9339b5dd1840d95dee
+      JWT_DURING: 2 days
+      BCRYPT_SALT_ROUND: 10
+    depends_on:
+      - mariadb
+  
+  mariadb:
+    image: mariadb
+    container_name: "mariadb"
+    ports: 
+      - 3306:3306
+    environment: 
+      MYSQL_DATABASE: hemengo_distrib
+      MYSQL_USER: toto
+      MYSQL_PASSWORD: toto
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ../data:/var/lib/mysql
