@@ -1,5 +1,7 @@
 const express = require('express')
 const models = require('../models/index')
+const util = require('../helpers/util')
+const { Op } = require('sequelize')
 
 // Use Express router
 let router = express.Router()
@@ -13,7 +15,8 @@ router.use((req, res, next) => {
 
 // Routing of Order ressource
 
-// Fetch all orders of everyone
+// Récupère toutes les commandes de tout le monde.
+// Param: aucun.
 router.get('', (req, res) => {
     models.Order.findAll().then(orders => {
 
@@ -35,7 +38,8 @@ router.get('', (req, res) => {
 })
 
 
-// Fetch one order by primary key (id)
+// Récupère une commande.
+// Param: id commande.
 router.get('/:id', (req, res) => {
     let orderId = req.params.id
 
@@ -67,7 +71,8 @@ router.get('/:id', (req, res) => {
 })
 
 
-// Fetch the products of an order
+// Récupère tous les produits d'une commande.
+// Param: id commande.
 router.get('/:id/products', (req, res) => {
     let orderId = req.params.id
 
@@ -109,7 +114,8 @@ router.get('/:id/products', (req, res) => {
 })
 
 
-// Fetch all orders by UserId (all orders of a given user)
+// Récupére toutes les commandes d'un utilisateur. Tous statuts confondus.
+// Param: id utilisateur.
 router.get('/user/:id', (req, res) => {
     let userId = req.params.id
 
@@ -120,7 +126,9 @@ router.get('/user/:id', (req, res) => {
     }
 
     models.Order.findAll({
-        where: { UserId: userId },
+        where: {
+            UserId: userId
+        },
         raw: true
     }).then(orders => {
         if (orders === null) {
@@ -141,7 +149,89 @@ router.get('/user/:id', (req, res) => {
 })
 
 
-// Create one order
+// Récupére toutes les commandes d'un utilisateur qui ont un statut actif, 
+// c'est à dire "confirmed" ou "paid" et qui ont une pickupDate non expirée.
+// En d'autres termes, les commandes prêtes à être récupérées.
+// Param: id utilisateur.
+router.get('/user/:id/active', (req, res) => {
+    let userId = req.params.id
+
+    if (!userId) {
+        return res.status(400).json({
+            message: "missing parameter"
+        })
+    }
+
+    models.Order.findAll({
+        where: {
+            UserId: userId,
+            StatusId: {
+                [Op.or]: [1, 3]
+            }
+        },
+        raw: true
+    }).then(orders => {
+        if (orders === null) {
+            return res.status(404).json({
+                message: "no orders for this user"
+            })
+        }
+
+        const futureOrders = orders.filter(o => util.isToday(o.pickupDate) || util.isInTheFuture(o.pickupDate))
+
+        // Found user's orders
+        return res.json({ orders: futureOrders })
+
+    }).catch(err => {
+        res.status(500).json({
+            message: "database error",
+            error: err
+        })
+    })
+})
+
+
+// Récupére toutes les commandes d'un utilisateur qui ont un statut inactif, 
+// c'est à dire "retrieved", "cancelled" ou "archived".
+// Param: id de l'utilisateur.
+router.get('/user/:id/archive', (req, res) => {
+    let userId = req.params.id
+
+    if (!userId) {
+        return res.status(400).json({
+            message: "missing parameter"
+        })
+    }
+
+    models.Order.findAll({
+        where: {
+            UserId: userId,
+            StatusId: {
+                [Op.or]: [2, 4, 5]
+            }
+        },
+        raw: true
+    }).then(orders => {
+        if (orders === null) {
+            return res.status(404).json({
+                message: "no archive orders for this user"
+            })
+        }
+
+        // Found user's archive orders
+        return res.json({ orders })
+
+    }).catch(err => {
+        res.status(500).json({
+            message: "database error",
+            error: err
+        })
+    })
+})
+
+
+// Crée une commande. Le prix total est automatiquement calculé en fonction des 
+// id produits passés dans le tableau products.
 router.post('', (req, res) => {
     const { UserId, StatusId, VendingMachineId, pickupDate, products } = req.body
 
@@ -178,7 +268,8 @@ router.post('', (req, res) => {
 })
 
 
-// Update one order
+// Met à jour une commande.
+// Param: id commande.
 router.patch('/:id', (req, res) => {
     let orderId = parseInt(req.params.id)
 
@@ -219,7 +310,8 @@ router.patch('/:id', (req, res) => {
 })
 
 
-// Restore one order
+// Restaure une commande.
+// Param: id commande.
 router.post('/untrash/:id', (req, res) => {
     let orderId = parseInt(req.params.id)
 
@@ -244,7 +336,8 @@ router.post('/untrash/:id', (req, res) => {
 })
 
 
-// Soft delete one order
+// Supprime une commande en mode soft.
+// Param: id commande.
 router.delete('/trash/:id', (req, res) => {
     let orderId = parseInt(req.params.id)
 
@@ -269,7 +362,8 @@ router.delete('/trash/:id', (req, res) => {
 })
 
 
-// Delete one order
+// Supprime completement une commande. Pas de restore possible.
+// Param: id commande.
 router.delete('/:id', (req, res) => {
     let orderId = parseInt(req.params.id)
 
