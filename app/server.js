@@ -23,6 +23,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/auth', router.auth)
+app.use('/upload', router.upload)
 app.use('/city', checkTokenMiddleware, router.city)
 app.use('/user', checkTokenMiddleware, router.user)
 app.use('/order', checkTokenMiddleware, router.order)
@@ -33,7 +34,6 @@ app.use('/producer', checkTokenMiddleware, router.producer)
 app.use('/matrixelement', checkTokenMiddleware, router.matrixElement)
 app.use('/vendingmachine', checkTokenMiddleware, router.vendingMachine)
 app.use('/productcategory', checkTokenMiddleware, router.productCategory)
-app.use('/upload', checkTokenMiddleware, router.upload)
 
 app.get('*', (req, res) => {
     res.status(501).send("Route not implemented")
