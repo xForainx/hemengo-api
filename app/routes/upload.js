@@ -16,7 +16,7 @@ router.use((req, res, next) => {
 
 router.get('/qrcode/:name', (req, res) => {
     const file = req.params.name
-    const filepath = `${process.env.APP_ROOT}/public/upload/qrcodes/${file}`
+    const filepath = `${process.env.APP_ROOT}/public/upload/qrcodes/${file}.png`
 
     fs.access(filepath, constants.R_OK, err => {
         if (err) {
