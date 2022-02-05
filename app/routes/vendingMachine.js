@@ -15,7 +15,7 @@ router.use((req, res, next) => {
 
 // Routing of Vending Machine ressource
 
-// Fetch all machines
+// Récupère toutes les machines
 router.get('', (req, res) => {
     models.VendingMachine.findAll().then(machines => {
         res.json({ machines })
@@ -28,37 +28,8 @@ router.get('', (req, res) => {
 })
 
 
-// Fetch one machine by its uuid
-router.get('/:uuid', (req, res) => {
-    let machineUuid = req.params.uuid
-
-    if (!machineUuid) {
-        return res.status(400).json({
-            message: "missing parameter"
-        })
-    }
-
-    models.VendingMachine.findOne({
-        where: { uuid: machineUuid },
-        raw: true
-    }).then(machine => {
-        if (machine === null) {
-            return res.status(404).json({
-                message: "machine does not exist"
-            })
-        }
-        // Found machine
-        return res.json({ machine })
-    }).catch(err => {
-        res.status(500).json({
-            message: "database error",
-            error: err
-        })
-    })
-})
-
-// Fetch one machine by its id
-router.get('/id/:id', (req, res) => {
+// Récupère une machine par son id
+router.get('/:id', (req, res) => {
     let machineId = req.params.id
 
     if (!machineId) {
@@ -76,8 +47,78 @@ router.get('/id/:id', (req, res) => {
                 message: "machine does not exist"
             })
         }
+
         // Found machine
         return res.json({ machine })
+
+    }).catch(err => {
+        res.status(500).json({
+            message: "database error",
+            error: err
+        })
+    })
+})
+
+
+// Récupère une machine par son uuid
+router.get('uuid/:uuid', (req, res) => {
+    let machineUuid = req.params.uuid
+
+    if (!machineUuid) {
+        return res.status(400).json({
+            message: "missing parameter"
+        })
+    }
+
+    models.VendingMachine.findOne({
+        where: { uuid: machineUuid },
+        raw: true
+    }).then(machine => {
+        if (machine === null) {
+            return res.status(404).json({
+                message: "machine does not exist"
+            })
+        }
+
+        // Found machine
+        return res.json({ machine })
+
+    }).catch(err => {
+        res.status(500).json({
+            message: "database error",
+            error: err
+        })
+    })
+})
+
+
+// Récupère les lockers d'une machine par son id
+router.get('/:id/lockers', (req, res) => {
+    let machineId = req.params.id
+
+    if (!machineId) {
+        return res.status(400).json({
+            message: "missing parameter"
+        })
+    }
+
+    models.VendingMachine.findByPk(machineId).then(machine => {
+        if (machine === null) {
+            return res.status(404).json({
+                message: "machine does not exist"
+            })
+        }
+
+        machine.getLockers().then(lockers => {
+            if (lockers === null) {
+                return res.status(404).json({
+                    message: "no lockers found for this vending machine"
+                })
+            }
+
+            return res.json({ lockers })
+        })
+
     }).catch(err => {
         res.status(500).json({
             message: "database error",
@@ -114,9 +155,10 @@ router.post('', (req, res) => {
         qrCodeFileName
     }).then(machine => {
 
-        // Creation of QRCode with uuid payload inside and saving it to a png file
+        // Création du QR Code avec l'uuid du distributeur comme data et enregistrement
+        // de celui ci dans un fichier .png dans upload/qrcodes
         QRCode.toFile(`public/upload/qrcodes/${qrCodeFileName}`, machineUuid, {
-            // Black (default) on transparent background
+            // Par défaut noir et fond transparent
             color: { light: '#0000' }
         }, function (err) {
             if (err) console.log(err)
