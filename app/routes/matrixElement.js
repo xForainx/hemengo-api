@@ -56,8 +56,43 @@ router.get('/:id', (req, res) => {
 })
 
 
+// Récupère plusieurs refs de matrice par leurs ids.
+// Exemple d'URL : "/matrixelement/some/q?ids=1,2,3"
+router.get('/some/:q', (req, res) => {
+    const ids = req.query.ids.split(",");
+
+    if (!ids) {
+        return res.status(400).json({
+            message: "missing or malformed parameter"
+        })
+    }
+
+    models.MatrixElement.findAll({
+        attributes: ['ref'],
+        where: { id: ids },
+        raw: true
+    }).then(refs => {
+
+        if (refs === null) {
+            return res.status(404).json({
+                message: "no refs found for these matrix elements"
+            })
+        }
+
+        // Found refs
+        return res.json({ refs: refs.map(r => r.ref) })
+
+    }).catch(err => {
+        res.status(500).json({
+            message: "database error",
+            error: err
+        })
+    })
+})
+
+
 // Fetch one matrixElement by its ref ("A1", "B5"...)
-router.get('/:ref', (req, res) => {
+router.get('/ref/:ref', (req, res) => {
     let matrixElementRef = req.params.ref
 
     if (!matrixElementRef) {
