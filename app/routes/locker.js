@@ -11,9 +11,9 @@ router.use((req, res, next) => {
     next()
 })
 
-// Routing of Locker ressource
+// Routes de la ressource Locker
 
-// Fetch all lockers
+// Récupère tous les casiers
 router.get('', (req, res) => {
     models.Locker.findAll().then(lockers => {
         res.json({ lockers })
@@ -25,8 +25,7 @@ router.get('', (req, res) => {
     })
 })
 
-
-// Fetch one locker by its id
+// Récupère un casier par son id
 router.get('/:id', (req, res) => {
     let lockerId = req.params.id
 
@@ -45,8 +44,10 @@ router.get('/:id', (req, res) => {
                 message: "locker does not exist"
             })
         }
+        
         // Found locker
         return res.json({ locker })
+
     }).catch(err => {
         res.status(500).json({
             message: "database error",
@@ -55,12 +56,11 @@ router.get('/:id', (req, res) => {
     })
 })
 
-
-// Create one locker
+// Crée un casier
 router.post('', (req, res) => {
     const {
         ProductId,
-        MatrixElementId,
+        MatrixElementRef,
         isFull,
         lastRefill,
         nextPlannedRefill
@@ -68,7 +68,7 @@ router.post('', (req, res) => {
 
     models.Locker.create({
         ProductId,
-        MatrixElementId,
+        MatrixElementRef,
         isFull,
         lastRefill,
         nextPlannedRefill
@@ -84,8 +84,7 @@ router.post('', (req, res) => {
     })
 })
 
-
-// Update one locker
+// Met à jour un casier par son id
 router.patch('/:id', (req, res) => {
     let lockerId = parseInt(req.params.id)
 
@@ -126,8 +125,7 @@ router.patch('/:id', (req, res) => {
     })
 })
 
-
-// Restore one locker
+// Restaure un casier
 router.post('/untrash/:id', (req, res) => {
     let lockerId = parseInt(req.params.id)
 
@@ -151,8 +149,7 @@ router.post('/untrash/:id', (req, res) => {
     })
 })
 
-
-// Soft delete one locker
+// Soft delete un casier
 router.delete('/trash/:id', (req, res) => {
     let lockerId = parseInt(req.params.id)
 
@@ -176,8 +173,7 @@ router.delete('/trash/:id', (req, res) => {
     })
 })
 
-
-// Delete one locker
+// Hard delete un casier
 router.delete('/:id', (req, res) => {
     let lockerId = parseInt(req.params.id)
 

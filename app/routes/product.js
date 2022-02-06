@@ -11,9 +11,9 @@ router.use((req, res, next) => {
     next()
 })
 
-// Routing of Product ressource
+// Routes de la ressource Product
 
-// Fetch all products
+// Tous les produits
 router.get('', (req, res) => {
     models.Product.findAll().then(products => {
         res.json({ products })
@@ -25,8 +25,7 @@ router.get('', (req, res) => {
     })
 })
 
-
-// Fetch one product by its id
+// Un produit par son id
 router.get('/:id', (req, res) => {
     let productId = req.params.id
 
@@ -45,8 +44,10 @@ router.get('/:id', (req, res) => {
                 message: "product does not exist"
             })
         }
+
         // Found product
         return res.json({ product })
+
     }).catch(err => {
         res.status(500).json({
             message: "database error",
@@ -55,8 +56,38 @@ router.get('/:id', (req, res) => {
     })
 })
 
+// Plusieurs produits par un ensemble d'id
+router.get('/several/:q', (req, res) => {
+    let productIds = req.query.ids.split(",")
 
-// Create one product
+    if (!productIds) {
+        return res.status(400).json({
+            message: "missing parameter"
+        })
+    }
+
+    models.Product.findAll({
+        where: { id: productIds },
+        raw: true
+    }).then(products => {
+        if (products === null) {
+            return res.status(404).json({
+                message: "products do not exist"
+            })
+        }
+
+        // Found products
+        return res.json({ products })
+
+    }).catch(err => {
+        res.status(500).json({
+            message: "database error",
+            error: err
+        })
+    })
+})
+
+// Crée un produit
 router.post('', (req, res) => {
     const {
         ProductCategoryId,
@@ -84,8 +115,7 @@ router.post('', (req, res) => {
     })
 })
 
-
-// Update one product
+// Met à jour un produit
 router.patch('/:id', (req, res) => {
     let productId = parseInt(req.params.id)
 
@@ -125,8 +155,7 @@ router.patch('/:id', (req, res) => {
     })
 })
 
-
-// Restore one product
+// Restaure un produit
 router.post('/untrash/:id', (req, res) => {
     let productId = parseInt(req.params.id)
 
@@ -150,8 +179,7 @@ router.post('/untrash/:id', (req, res) => {
     })
 })
 
-
-// Soft delete one product
+// Soft delete un produit
 router.delete('/trash/:id', (req, res) => {
     let productId = parseInt(req.params.id)
 
@@ -175,8 +203,7 @@ router.delete('/trash/:id', (req, res) => {
     })
 })
 
-
-// Delete one product
+// Hard delete un produit
 router.delete('/:id', (req, res) => {
     let productId = parseInt(req.params.id)
 
