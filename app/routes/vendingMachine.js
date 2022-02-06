@@ -116,6 +116,7 @@ router.get('/:id/lockers', (req, res) => {
                 })
             }
 
+            // Found lockers
             return res.json({ lockers })
         })
 

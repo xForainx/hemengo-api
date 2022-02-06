@@ -56,37 +56,6 @@ router.get('/:id', (req, res) => {
     })
 })
 
-// Plusieurs produits par un ensemble d'id
-router.get('/several/:q', (req, res) => {
-    let productIds = req.query.ids.split(",")
-
-    if (!productIds) {
-        return res.status(400).json({
-            message: "missing parameter"
-        })
-    }
-
-    models.Product.findAll({
-        where: { id: productIds },
-        raw: true
-    }).then(products => {
-        if (products === null) {
-            return res.status(404).json({
-                message: "products do not exist"
-            })
-        }
-
-        // Found products
-        return res.json({ products })
-
-    }).catch(err => {
-        res.status(500).json({
-            message: "database error",
-            error: err
-        })
-    })
-})
-
 // Crée un produit
 router.post('', (req, res) => {
     const {
