@@ -20,11 +20,13 @@
         "mariadb": "^2.5.4",
         "mysql2": "^2.2.5",
         "qrcode": "^1.5.0",
-        "sequelize": "^6.6.5"
+        "sequelize": "^6.6.5",
+        "unit.js": "^2.1.1"
     },
     "devDependencies": {
         "axios": "^0.24.0",
         "jasmine": "^4.0.2",
-        "nodemon": "^2.0.12"
+        "nodemon": "^2.0.12",
+        "supertest": "^6.2.2"
     }
 }
