@@ -15,8 +15,7 @@ router.use((req, res, next) => {
 
 // Routing of Order ressource
 
-// Récupère toutes les commandes de tout le monde.
-// Param: aucun.
+// Fetch all orders of everyone.
 router.get('', (req, res) => {
     models.Order.findAll().then(orders => {
 
@@ -38,8 +37,7 @@ router.get('', (req, res) => {
 })
 
 
-// Récupère une commande.
-// Param: id commande.
+// Fetch one order by its id.
 router.get('/:id', (req, res) => {
     let orderId = req.params.id
 
@@ -71,8 +69,8 @@ router.get('/:id', (req, res) => {
 })
 
 
-// Récupère tous les produits d'une commande.
-// Param: id commande.
+// Fetch all products of an order by its id.
+// Param: id - Order id.
 router.get('/:id/products', (req, res) => {
     let orderId = req.params.id
 
@@ -114,8 +112,8 @@ router.get('/:id/products', (req, res) => {
 })
 
 
-// Récupére toutes les commandes d'un utilisateur. Tous statuts confondus.
-// Param: id utilisateur.
+// Fetch all orders of a user by user id. All statuses included.
+// Param: id - User id.
 router.get('/user/:id', (req, res) => {
     let userId = req.params.id
 
@@ -149,10 +147,9 @@ router.get('/user/:id', (req, res) => {
 })
 
 
-// Récupére toutes les commandes d'un utilisateur qui ont un statut actif, 
-// c'est à dire "confirmed" ou "paid" et qui ont une pickupDate non expirée.
-// En d'autres termes, les commandes prêtes à être récupérées.
-// Param: id utilisateur.
+// Fetch all active orders of a user. These orders have a status confirmed or paid,
+// with a pickup date that is not expired.
+// Param: id - User id.
 router.get('/user/:id/active', (req, res) => {
     let userId = req.params.id
 
@@ -191,9 +188,8 @@ router.get('/user/:id/active', (req, res) => {
 })
 
 
-// Récupére toutes les commandes d'un utilisateur qui ont un statut inactif, 
-// c'est à dire "retrieved", "cancelled" ou "archived".
-// Param: id de l'utilisateur.
+// Fetch all archive-like orders of a user. Retrieved, archived, cancelled orders.
+// Param: id - User id.
 router.get('/user/:id/archive', (req, res) => {
     let userId = req.params.id
 
@@ -230,8 +226,8 @@ router.get('/user/:id/archive', (req, res) => {
 })
 
 
-// Crée une commande. Le prix total est automatiquement calculé en fonction des 
-// id produits passés dans le tableau products.
+// Create an order. Total price is automatically calculated with
+// the products ids array.
 router.post('', (req, res) => {
     const { UserId, StatusId, VendingMachineId, pickupDate, products } = req.body
 
@@ -268,8 +264,8 @@ router.post('', (req, res) => {
 })
 
 
-// Met à jour une commande.
-// Param: id commande.
+// Update one order.
+// Param: id - Order id.
 router.patch('/:id', (req, res) => {
     let orderId = parseInt(req.params.id)
 
@@ -310,8 +306,8 @@ router.patch('/:id', (req, res) => {
 })
 
 
-// Restaure une commande.
-// Param: id commande.
+// Restore one order.
+// Param: id - Order id.
 router.post('/untrash/:id', (req, res) => {
     let orderId = parseInt(req.params.id)
 
@@ -336,8 +332,8 @@ router.post('/untrash/:id', (req, res) => {
 })
 
 
-// Supprime une commande en mode soft.
-// Param: id commande.
+// Soft delete one order.
+// Param: id - Order id.
 router.delete('/trash/:id', (req, res) => {
     let orderId = parseInt(req.params.id)
 
@@ -362,8 +358,8 @@ router.delete('/trash/:id', (req, res) => {
 })
 
 
-// Supprime completement une commande. Pas de restore possible.
-// Param: id commande.
+// Hard delete one order.
+// Param: id - Order id.
 router.delete('/:id', (req, res) => {
     let orderId = parseInt(req.params.id)
 

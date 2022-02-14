@@ -11,9 +11,9 @@ router.use((req, res, next) => {
     next()
 })
 
-// Routes de la ressource MatrixElement
+// Routing of MatrixElement ressource
 
-// Récupère toutes les refs de matrice
+// Fetch all references
 router.get('', (req, res) => {
     models.MatrixElement.findAll().then(matrixElements => {
         res.json({ matrixElements })
@@ -25,7 +25,7 @@ router.get('', (req, res) => {
     })
 })
 
-// Crée une ref de matrice
+// Create one ref
 router.post('', (req, res) => {
     const { ref } = req.body
 
@@ -43,7 +43,7 @@ router.post('', (req, res) => {
     })
 })
 
-// Met à jour une ref de matrice
+// Update one ref
 router.patch('/:ref', (req, res) => {
     let ref = parseInt(req.params.id)
 
