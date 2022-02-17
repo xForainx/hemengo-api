@@ -11,9 +11,9 @@ router.use((req, res, next) => {
     next()
 })
 
-// Routes de la ressource Locker
+// Routing of Locker ressource
 
-// Récupère tous les casiers
+// Fetch all lockers
 router.get('', (req, res) => {
     models.Locker.findAll().then(lockers => {
         res.json({ lockers })
@@ -25,7 +25,7 @@ router.get('', (req, res) => {
     })
 })
 
-// Récupère un casier par son id
+// Fetch one locker by its id
 router.get('/:id', (req, res) => {
     let lockerId = req.params.id
 
@@ -56,7 +56,7 @@ router.get('/:id', (req, res) => {
     })
 })
 
-// Crée un casier
+// Create one locker
 router.post('', (req, res) => {
     const {
         ProductId,
@@ -84,7 +84,7 @@ router.post('', (req, res) => {
     })
 })
 
-// Met à jour un casier par son id
+// Update one locker by its id
 router.patch('/:id', (req, res) => {
     let lockerId = parseInt(req.params.id)
 
@@ -125,7 +125,7 @@ router.patch('/:id', (req, res) => {
     })
 })
 
-// Restaure un casier
+// Restore one locker by its id
 router.post('/untrash/:id', (req, res) => {
     let lockerId = parseInt(req.params.id)
 
@@ -149,7 +149,7 @@ router.post('/untrash/:id', (req, res) => {
     })
 })
 
-// Soft delete un casier
+// Delete one locker by its id, softly.
 router.delete('/trash/:id', (req, res) => {
     let lockerId = parseInt(req.params.id)
 
@@ -173,7 +173,7 @@ router.delete('/trash/:id', (req, res) => {
     })
 })
 
-// Hard delete un casier
+// Delete one locker by its id, hardly.
 router.delete('/:id', (req, res) => {
     let lockerId = parseInt(req.params.id)
 

@@ -2,7 +2,7 @@ module.exports = {
     /**
      * Retourne true si la date correspond à aujourd'hui, false ou une erreur autrement.
      * @param {string} date 
-     * @returns 
+     * @returns {boolean}
      */
     isToday(date) {
         try {
@@ -28,7 +28,7 @@ module.exports = {
      * false ou une erreur autrement.
      * Se sert des temps UNIX (ms) des deux dates comme unité de comparaison.
      * @param {string} date 
-     * @returns 
+     * @returns {boolean}
      */
     isInTheFuture(date) {
         try {

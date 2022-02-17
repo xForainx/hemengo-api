@@ -1,20 +1,30 @@
 // Import necessary modules
 const jwt = require('jsonwebtoken');
 
-// Token extraction
+/**
+ * Bearer token extrait du header d'autorisation HTTP.
+ * @param {*} authorization 
+ * @returns 
+ */
 const extractBearer = authorization => {
 
     if (typeof authorization !== 'string') {
         return false;
     }
 
-    // Token isolation
+    // Isolation du Bearer Token
     const matches = authorization.match(/(bearer)\s+(\S+)/i);
 
     return matches && matches[2];
 }
 
-// Token existence verification
+/**
+ * Vérifie le Bearer Token de la requête.
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ * @returns 
+ */
 const checkTokenMiddleware = (req, res, next) => {
 
     const token = req.headers.authorization && extractBearer(req.headers.authorization);
