@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     stages {
-        stage('Chekout') {
+        stage('Checkout') {
             steps {
                 git 'https://github.com/hyperdestru/hemengo-api.git'
                 echo 'Checkout Completed'
@@ -10,12 +10,12 @@ pipeline {
         }
         stage('Test') {
             steps {
-                echo 'Testing..'
+                echo 'Testing...'
             }
         }
         stage('Deploy') {
             steps {
-                echo 'Deploying....'
+                echo 'Deploying...'
             }
         }
     }
