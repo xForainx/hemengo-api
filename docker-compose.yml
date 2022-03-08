@@ -23,6 +23,7 @@ services:
     ports:
       - 3000:3000
     environment:
+      APP_ROOT: $APP_ROOT
       SERVER_PORT: 3000
       DB_HOST: "mariadb"
       DB_PORT: 3306
