@@ -13,10 +13,30 @@ router.use((req, res, next) => {
     next()
 })
 
-// Routing of Auth ressource
-
-// Log in an existing user by its email and password
-// This route generate a jwt token if successful
+/**
+ * @api {post} /login Login to API.
+ * @apiName PostLogin
+ * @apiGroup Auth
+ * @apiParam {String} email User unique email.
+ * @apiParam {String} password User password.
+ * @apiSuccess {String} accessToken JWT token with expiration date.
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOi..."
+ *     }
+ * @apiError {String} message (400) "incorrect email or password".
+ * @apiError {String} message (401) "account does not exists".
+ * @apiError {String} message (401) "incorrect password".
+ * @apiError {String} message (500) "login process failed".
+ * @apiError {String} message (500) "database error".
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *       "message": "login process failed",
+ *       "error": err
+ *     }
+ */
 router.post('/login', (req, res) => {
     const { email, password } = req.body
 
