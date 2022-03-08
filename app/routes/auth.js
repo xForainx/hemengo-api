@@ -20,23 +20,34 @@ router.use((req, res, next) => {
  * @apiParam {String} email User unique email.
  * @apiParam {String} password User password.
  * @apiSuccess {String} accessToken JWT token with expiration date.
- * @apiSuccessExample Success-Response:
+ * @apiSuccessExample Success-Response-Example:
  *     HTTP/1.1 200 OK
  *     {
  *       "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOi..."
  *     }
- * @apiError {String} message "login process failed".
- * @apiErrorExample Error-Response:
+ * @apiError {String} message Nature of problem.
+ * @apiError {String} error Only if HTTP status >= 500. Error parameter value of catch method.
+ * @apiErrorExample Error-Response-Examples:
  *     HTTP/1.1 500 Internal Server Error
  *     {
  *       "message": "login process failed",
  *       "error": err
  *     }
  * 
- *     HTTP/1.1 400 Internal Server Error
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *       "message": "database error",
+ *       "error": err
+ *     }
+ * 
+ *     HTTP/1.1 400 Bad Request
  *     {
  *       "message": "incorrect email or password",
- *       "error": err
+ *     }
+ * 
+  *     HTTP/1.1 401 Unauthorized
+ *     {
+ *       "message": "account does not exists",
  *     }
  */
 router.post('/login', (req, res) => {
