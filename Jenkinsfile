@@ -4,8 +4,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/hyperdestru/hemengo-api.git'
-                echo 'Checkout Completed'
+                echo 'Checkout...'
             }
         }
         stage('Test') {
