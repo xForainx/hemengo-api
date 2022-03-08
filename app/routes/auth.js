@@ -25,15 +25,17 @@ router.use((req, res, next) => {
  *     {
  *       "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOi..."
  *     }
- * @apiError {String} message (400) "incorrect email or password".
- * @apiError {String} message (401) "account does not exists".
- * @apiError {String} message (401) "incorrect password".
- * @apiError {String} message (500) "login process failed".
- * @apiError {String} message (500) "database error".
+ * @apiError {String} message "login process failed".
  * @apiErrorExample Error-Response:
  *     HTTP/1.1 500 Internal Server Error
  *     {
  *       "message": "login process failed",
+ *       "error": err
+ *     }
+ * 
+ *     HTTP/1.1 400 Internal Server Error
+ *     {
+ *       "message": "incorrect email or password",
  *       "error": err
  *     }
  */
