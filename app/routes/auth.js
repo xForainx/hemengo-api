@@ -14,11 +14,11 @@ router.use((req, res, next) => {
 })
 
 /**
- * @api {post} /login Login to API.
+ * @api {post} /login Login to API
  * @apiName PostLogin
  * @apiGroup Auth
- * @apiParam {String} email User unique email.
- * @apiParam {String} password User password.
+ * @apiBody {String} email User unique email.
+ * @apiBody {String} password User password.
  * @apiSuccess {String} accessToken JWT token with expiration date.
  * @apiSuccessExample Success-Response-Example:
  *     HTTP/1.1 200 OK
