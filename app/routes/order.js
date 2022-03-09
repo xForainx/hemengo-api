@@ -3,19 +3,16 @@ const models = require('../models/index')
 const util = require('../helpers/util')
 const { Op } = require('sequelize')
 
-// Use Express router
+// Usage Express Router
 let router = express.Router()
 
-// Logger middleware
+// Middleware de logs
 router.use((req, res, next) => {
     const event = new Date()
     console.log("Attempted to access order ressource : ", event.toString())
     next()
 })
 
-// Routing of Order ressource
-
-// Fetch all orders of everyone.
 router.get('', (req, res) => {
     models.Order.findAll().then(orders => {
 
@@ -69,8 +66,60 @@ router.get('/:id', (req, res) => {
 })
 
 
-// Fetch all products of an order by its id.
-// Param: id - Order id.
+/**
+ * @api {get} /order/:id/products Récupère tous les produits d'une commande
+ * @apiName GetOrderProducts
+ * @apiGroup Order
+ * @apiParam {Number} id Order unique id
+ * @apiSuccess {Product[]} products Tableau des produits de la commande
+ * @apiSuccessExample Exemple de réponse de succès:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "products": [
+ *         { 
+ *           "id": 2,
+ *           "name": "poire",
+ *           "ref": "poire-f05",
+ *           "price": 5,
+ *           "daysBeforeExpire": 7,
+ *           "createdAt": "2022-02-06T00:00:00.000Z",
+ *           "updatedAt": "2022-02-06T00:00:00.000Z",
+ *           "deletedAt": null,
+ *           "ProductCategoryId": 1,
+ *           "order_product": {
+ *             "createdAt": "2022-02-06T15:11:01.000Z",
+ *             "updatedAt": "2022-02-06T15:11:01.000Z",
+ *             "OrderId": 2,
+ *             "ProductId": 2
+ *           }
+ *         }  
+ *       ]
+ *     }
+ * @apiError {String} message Description concise du problème
+ * @apiError {String} error Si statut HTTP >= 500. Valeur du paramètre error de la méthode catch
+ * @apiErrorExample Exemples de réponses d'erreur:
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *       "message": "unable to get order products",
+ *       "error": err
+ *     }
+ * 
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *       "message": "database error",
+ *       "error": err
+ *     }
+ * 
+ *     HTTP/1.1 400 Bad Request
+ *     {
+ *       "message": "missing parameter",
+ *     }
+ * 
+ *     HTTP/1.1 404 Not Found
+ *     {
+ *       "message": "order does not exist",
+ *     }
+ */
 router.get('/:id/products', (req, res) => {
     let orderId = req.params.id
 
@@ -98,7 +147,7 @@ router.get('/:id/products', (req, res) => {
 
         }).catch(err => {
             res.status(500).json({
-                message: "unable to get order product(s)",
+                message: "unable to get order products",
                 error: err
             })
         })
@@ -147,9 +196,49 @@ router.get('/user/:id', (req, res) => {
 })
 
 
-// Fetch all active orders of a user. These orders have a status confirmed or paid,
-// with a pickup date that is not expired.
-// Param: id - User id.
+/**
+ * @api {get} /order/user/:id/active Récupère toutes les commandes "actives" d'un utilisateur.
+ * C'est à dire les commandes qui ont un statut "confirmed" ou "paid" et avec une pickupDate non expirée.
+ * @apiName GetOrderUserActive
+ * @apiGroup Order
+ * @apiParam {Number} id User unique id
+ * @apiSuccess {Order[]} orders Tableau des commandes actives
+ * @apiSuccessExample Exemple de réponse de succès:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "orders": [
+ *         { 
+ *           "id": 3,
+ *           "price": 18,
+ *           "pickupDate": "2022-04-16T00:00:00.000Z",
+ *           "createdAt": "2022-02-06T15:11:56.000Z",
+ *           "updatedAt": "2022-02-06T15:11:56.000Z",
+ *           "deletedAt": null,
+ *           "UserId": 1,
+ *           "StatusId": 1,
+ *           "VendingMachineId": 4
+ *         }  
+ *       ]
+ *     }
+ * @apiError {String} message Description concise du problème
+ * @apiError {String} error Si statut HTTP >= 500. Valeur du paramètre error de la méthode catch
+ * @apiErrorExample Exemples de réponses d'erreur:
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *       "message": "database error",
+ *       "error": err
+ *     }
+ * 
+ *     HTTP/1.1 400 Bad Request
+ *     {
+ *       "message": "missing parameter",
+ *     }
+ * 
+ *     HTTP/1.1 404 Not Found
+ *     {
+ *       "message": "no orders for this user",
+ *     }
+ */
 router.get('/user/:id/active', (req, res) => {
     let userId = req.params.id
 
@@ -188,8 +277,49 @@ router.get('/user/:id/active', (req, res) => {
 })
 
 
-// Fetch all archive-like orders of a user. Retrieved, archived, cancelled orders.
-// Param: id - User id.
+/**
+ * @api {get} /order/user/:id/archive Récupère toutes les commandes "archivées" d'un utilisateur.
+ * C'est à dire les commandes qui ont un statut "cancelled", "archived" ou "retrieved".
+ * @apiName GetOrderUserArchive
+ * @apiGroup Order
+ * @apiParam {Number} id User unique id
+ * @apiSuccess {Order[]} orders Tableau des commandes archivées
+ * @apiSuccessExample Exemple de réponse de succès:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "orders": [
+ *         { 
+ *           "id": 6,
+ *           "price": 32,
+ *           "pickupDate": "2022-01-05T00:00:00.000Z",
+ *           "createdAt": "2022-01-02T15:11:56.000Z",
+ *           "updatedAt": "2022-01-02T15:11:56.000Z",
+ *           "deletedAt": null,
+ *           "UserId": 1,
+ *           "StatusId": 4,
+ *           "VendingMachineId": 4
+ *         }  
+ *       ]
+ *     }
+ * @apiError {String} message Description concise du problème
+ * @apiError {String} error Si statut HTTP >= 500. Valeur du paramètre error de la méthode catch
+ * @apiErrorExample Exemples de réponses d'erreur:
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *       "message": "database error",
+ *       "error": err
+ *     }
+ * 
+ *     HTTP/1.1 400 Bad Request
+ *     {
+ *       "message": "missing parameter",
+ *     }
+ * 
+ *     HTTP/1.1 404 Not Found
+ *     {
+ *       "message": "no archive orders for this user",
+ *     }
+ */
 router.get('/user/:id/archive', (req, res) => {
     let userId = req.params.id
 

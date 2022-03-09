@@ -14,20 +14,20 @@ router.use((req, res, next) => {
 })
 
 /**
- * @api {post} /login Connexion à l'API
+ * @api {post} /auth/login Connexion à l'API
  * @apiName PostLogin
  * @apiGroup Auth
  * @apiBody {String} email Email unique de l'utilisateur
  * @apiBody {String} password Mot de passe de l'utilisateur
  * @apiSuccess {String} accessToken Token JWT avec expiration
- * @apiSuccessExample Success-Response-Example:
+ * @apiSuccessExample Exemple de réponse de succès:
  *     HTTP/1.1 200 OK
  *     {
  *       "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOi..."
  *     }
  * @apiError {String} message Description concise du problème
  * @apiError {String} error Si statut HTTP >= 500. Valeur du paramètre error de la méthode catch
- * @apiErrorExample Error-Response-Examples:
+ * @apiErrorExample Exemples de réponses d'erreur:
  *     HTTP/1.1 500 Internal Server Error
  *     {
  *       "message": "login process failed",
@@ -103,20 +103,20 @@ router.post('/login', (req, res) => {
 
 
 /**
- * @api {post} /register Inscription à l'API
+ * @api {post} /auth/register Inscription à l'API
  * @apiName PostRegister
  * @apiGroup Auth
  * @apiBody {String} email Email unique choisi
  * @apiBody {String} password Mot de passe choisi
  * @apiSuccess {String} accessToken Token JWT avec expiration
- * @apiSuccessExample Success-Response-Example:
+ * @apiSuccessExample Exemple de réponse de succès:
  *     HTTP/1.1 200 OK
  *     {
  *       "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOi..."
  *     }
  * @apiError {String} message Description concise du problème
  * @apiError {String} error Si statut HTTP >= 500. Valeur du paramètre error de la méthode catch
- * @apiErrorExample Error-Response-Examples:
+ * @apiErrorExample Exemples de réponses d'erreur:
  *     HTTP/1.1 500 Internal Server Error
  *     {
  *       "message": "registering process failed",
