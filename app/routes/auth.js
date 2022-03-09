@@ -14,7 +14,7 @@ router.use((req, res, next) => {
 })
 
 /**
- * @api {post} /auth/login Connexion à l'API
+ * @api {post} /auth/login Connexion API
  * @apiName PostLogin
  * @apiGroup Auth
  * @apiBody {String} email Email unique de l'utilisateur
@@ -103,7 +103,7 @@ router.post('/login', (req, res) => {
 
 
 /**
- * @api {post} /auth/register Inscription à l'API
+ * @api {post} /auth/register Inscription API
  * @apiName PostRegister
  * @apiGroup Auth
  * @apiBody {String} email Email unique choisi

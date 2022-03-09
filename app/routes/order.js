@@ -22,7 +22,6 @@ router.get('', (req, res) => {
             })
         }
 
-        // Found orders
         return res.json({ orders })
 
     }).catch(err => {
@@ -54,7 +53,6 @@ router.get('/:id', (req, res) => {
             })
         }
 
-        // Found order
         return res.json({ order })
 
     }).catch(err => {
@@ -67,7 +65,8 @@ router.get('/:id', (req, res) => {
 
 
 /**
- * @api {get} /order/:id/products Récupère tous les produits d'une commande
+ * @api {get} /order/:id/products Récupération produits
+ * @apiDescription Retourne tous les produits d'une commande donnée.
  * @apiName GetOrderProducts
  * @apiGroup Order
  * @apiParam {Number} id Order unique id
@@ -197,7 +196,8 @@ router.get('/user/:id', (req, res) => {
 
 
 /**
- * @api {get} /order/user/:id/active Récupère toutes les commandes "actives" d'un utilisateur.
+ * @api {get} /order/user/:id/active Récupération commandes actives utilisateur
+ * @apiDescription Récupère toutes les commandes "actives" d'un utilisateur.
  * C'est à dire les commandes qui ont un statut "confirmed" ou "paid" et avec une pickupDate non expirée.
  * @apiName GetOrderUserActive
  * @apiGroup Order
@@ -278,7 +278,8 @@ router.get('/user/:id/active', (req, res) => {
 
 
 /**
- * @api {get} /order/user/:id/archive Récupère toutes les commandes "archivées" d'un utilisateur.
+ * @api {get} /order/user/:id/archive Récupération commandes archivées utilisateur
+ * @apiDescription Récupère toutes les commandes "archivées" d'un utilisateur.
  * C'est à dire les commandes qui ont un statut "cancelled", "archived" ou "retrieved".
  * @apiName GetOrderUserArchive
  * @apiGroup Order
