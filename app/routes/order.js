@@ -360,14 +360,14 @@ router.get('/user/:id/archive', (req, res) => {
  * @apiDescription Crée une commande. Le prix total est calculé automatiquement
  * en fonction du prix de chaque produit dont les ids sont contenus dans 
  * le champ products du body.
- * @apiName GetOrderUserArchive
+ * @apiName PostOrder
  * @apiGroup Order
  * @apiBody {Number} UserId Id unique de l'utilisateur
  * @apiBody {Number} StatusId Id unique du statut de la commande
  * @apiBody {Number} VendingMachineId Id unique du distributeur
  * @apiBody {String} pickupDate Date de récupération de la commande (YYYY-MM-DDTHH:MM:SS.000Z)
  * @apiBody {Number[]} products Tableau d'ids de produits
- * @apiSuccess {Order[]} orders Tableau des commandes archivées
+ * @apiSuccess {String} message Message de succés
  * @apiSuccessExample Exemple de réponse de succès:
  *     HTTP/1.1 200 OK
  *     {
@@ -418,8 +418,43 @@ router.post('', (req, res) => {
 })
 
 
-// Update one order.
-// Param: id - Order id.
+/**
+ * @api {patch} /order/:id Modification commande
+ * @apiDescription Modifie une commande. Modifiera tous les champs de la ressource
+ * trouvés dans le body.
+ * @apiName PatchOrder
+ * @apiGroup Order
+ * @apiParam {Number} id Id unique de la commande
+ * @apiBody {Number} [price] Prix de la commande
+ * @apiBody {String} [pickupDate] Date de récupération de la commande (YYYY-MM-DDTHH:MM:SS.000Z)
+ * @apiBody {Number} [UserId] Id unique de l'utilisateur
+ * @apiBody {Number} [StatusId] Id unique du statut
+ * @apiBody {Number} [VendingMachineId] Id unique du distributeur
+ * @apiSuccess {String} message Message de succés
+ * @apiSuccessExample Exemple de réponse de succès:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "message": "order updated"
+ *     }
+ * @apiError {String} message Description concise du problème
+ * @apiError {String} error Si statut HTTP >= 500. Valeur du paramètre error de la méthode catch
+ * @apiErrorExample Exemples de réponses d'erreur:
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *       "message": "database error",
+ *       "error": err
+ *     }
+ * 
+ *     HTTP/1.1 400 Bad Request
+ *     {
+ *       "message": "missing parameter"
+ *     }
+ * 
+ *     HTTP/1.1 404 Not Found
+ *     {
+ *       "message": "order does not exists"
+ *     }
+ */
 router.patch('/:id', (req, res) => {
     let orderId = parseInt(req.params.id)
 
