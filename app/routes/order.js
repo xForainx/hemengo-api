@@ -69,7 +69,7 @@ router.get('/:id', (req, res) => {
  * @apiDescription Retourne tous les produits d'une commande donnée.
  * @apiName GetOrderProducts
  * @apiGroup Order
- * @apiParam {Number} id Order unique id
+ * @apiParam {Number} id Id unique de la commande
  * @apiSuccess {Product[]} products Tableau des produits de la commande
  * @apiSuccessExample Exemple de réponse de succès:
  *     HTTP/1.1 200 OK
@@ -201,7 +201,7 @@ router.get('/user/:id', (req, res) => {
  * C'est à dire les commandes qui ont un statut "confirmed" ou "paid" et avec une pickupDate non expirée.
  * @apiName GetOrderUserActive
  * @apiGroup Order
- * @apiParam {Number} id User unique id
+ * @apiParam {Number} id Id unique de l'utilisateur
  * @apiSuccess {Order[]} orders Tableau des commandes actives
  * @apiSuccessExample Exemple de réponse de succès:
  *     HTTP/1.1 200 OK
@@ -282,7 +282,7 @@ router.get('/user/:id/active', (req, res) => {
  * C'est à dire les commandes qui ont un statut "cancelled", "archived" ou "retrieved".
  * @apiName GetOrderUserArchive
  * @apiGroup Order
- * @apiParam {Number} id User unique id
+ * @apiParam {Number} id Id unique de l'utilisateur
  * @apiSuccess {Order[]} orders Tableau des commandes archivées
  * @apiSuccessExample Exemple de réponse de succès:
  *     HTTP/1.1 200 OK
