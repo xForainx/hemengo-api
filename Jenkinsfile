@@ -1,21 +1,27 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'node:16' 
+            args '-p 3000:3000' 
+        }
+    }
 
     stages {
-        stage('Chekout') {
+        stage('Build') {
             steps {
-                git 'https://github.com/hyperdestru/hemengo-api.git'
-                echo 'Checkout Completed'
+                sh 'npm install'
+                echo 'Built'
             }
         }
         stage('Test') {
             steps {
-                echo 'Testing..'
+                sh 'npm run test'
+                echo 'Tested'
             }
         }
         stage('Deploy') {
             steps {
-                echo 'Deploying....'
+                echo 'Deployed'
             }
         }
     }
