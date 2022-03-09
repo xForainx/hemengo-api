@@ -3,10 +3,10 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const models = require('../models/index')
 
-// Use Express router
+// Usage de Express Router
 let router = express.Router()
 
-// Logger middleware
+// Middleware de logs
 router.use((req, res, next) => {
     const event = new Date()
     console.log("Attempted to authenticate : ", event.toString())
@@ -14,19 +14,19 @@ router.use((req, res, next) => {
 })
 
 /**
- * @api {post} /login Login to API
+ * @api {post} /login Connexion à l'API
  * @apiName PostLogin
  * @apiGroup Auth
- * @apiBody {String} email User unique email.
- * @apiBody {String} password User password.
- * @apiSuccess {String} accessToken JWT token with expiration date.
+ * @apiBody {String} email Email unique de l'utilisateur
+ * @apiBody {String} password Mot de passe de l'utilisateur
+ * @apiSuccess {String} accessToken Token JWT avec expiration
  * @apiSuccessExample Success-Response-Example:
  *     HTTP/1.1 200 OK
  *     {
  *       "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOi..."
  *     }
- * @apiError {String} message Nature of problem.
- * @apiError {String} error Only if HTTP status >= 500. Error parameter value of catch method.
+ * @apiError {String} message Description concise du problème
+ * @apiError {String} error Si statut HTTP >= 500. Valeur du paramètre error de la méthode catch
  * @apiErrorExample Error-Response-Examples:
  *     HTTP/1.1 500 Internal Server Error
  *     {
@@ -68,7 +68,7 @@ router.post('/login', (req, res) => {
             })
         }
 
-        // Password check
+        // Check du mot de passe (comparaison avec le hash en bdd)
         bcrypt.compare(password, user.password).then(test => {
             if (!test) {
                 return res.status(401).json({
@@ -76,7 +76,7 @@ router.post('/login', (req, res) => {
                 })
             }
 
-            // Generate token
+            // Generation du token
             const accessToken = jwt.sign({
                 id: user.dataValues.id,
                 email: user.dataValues.email
@@ -102,8 +102,38 @@ router.post('/login', (req, res) => {
 })
 
 
-// Registering (creating) a user with its email and password
-// This route generate a jwt token if successful
+/**
+ * @api {post} /register Inscription à l'API
+ * @apiName PostRegister
+ * @apiGroup Auth
+ * @apiBody {String} email Email unique choisi
+ * @apiBody {String} password Mot de passe choisi
+ * @apiSuccess {String} accessToken Token JWT avec expiration
+ * @apiSuccessExample Success-Response-Example:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOi..."
+ *     }
+ * @apiError {String} message Description concise du problème
+ * @apiError {String} error Si statut HTTP >= 500. Valeur du paramètre error de la méthode catch
+ * @apiErrorExample Error-Response-Examples:
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *       "message": "registering process failed",
+ *       "error": err
+ *     }
+ * 
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *       "message": "hashing process failed",
+ *       "error": err
+ *     }
+ * 
+ *     HTTP/1.1 400 Bad Request
+ *     {
+ *       "message": "incorrect email or password",
+ *     }
+ */
 router.post('/register', (req, res) => {
     const { email, password } = req.body
 
@@ -113,11 +143,11 @@ router.post('/register', (req, res) => {
         })
     }
 
-    // Hashing and salting password
+    // Hashage et salage du mot de passe fourni
     bcrypt.hash(password, parseInt(process.env.BCRYPT_SALT_ROUND)).then(hash => {
-        // Creating user
+        // Création de l'utilisateur
         models.User.create({ email: email, password: hash }).then(user => {
-            // Generate token
+            // Génération du token
             const accessToken = jwt.sign({
                 id: user.dataValues.id,
                 email: user.dataValues.email
