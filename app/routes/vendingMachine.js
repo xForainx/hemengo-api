@@ -3,17 +3,15 @@ const models = require('../models/index')
 const crypto = require('crypto')
 const QRCode = require('qrcode')
 
-// Use Express router
+// Usage Express Router
 let router = express.Router()
 
-// Logger middleware
+// Middleware de logs
 router.use((req, res, next) => {
     const event = new Date()
     console.log("Attempted to access vending machine ressource : ", event.toString())
     next()
 })
-
-// Routing of Vending Machine ressource
 
 // Récupère toutes les machines
 router.get('', (req, res) => {
@@ -28,7 +26,51 @@ router.get('', (req, res) => {
 })
 
 
-// Récupère une machine par son id
+/**
+ * @api {get} /vendingmachine/:id Récupération distributeur
+ * @apiDescription Retourne un distributeur par son id.
+ * @apiName GetVendingMachine
+ * @apiGroup VendingMachine
+ * @apiParam {Number} id Id unique du distributeur
+ * @apiSuccess {Machine} machine Objet representant un distributeur
+ * @apiSuccessExample Exemple de réponse de succès:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "machine": { 
+ *         "id": 3,
+ *         "uuid": "85d9376b-9a13-4665-ad59-19d90c107eca",
+ *         "ref": "thx-1138",
+ *         "latitude": 0,
+ *         "longitude": 0,
+ *         "street": "",
+ *         "maxLineCapacity": 6,
+ *         "maxRowCapacity": 5,
+ *         "qrCodeFileName": "85d9376b-9a13-4665-ad59-19d90c107eca.png",
+ *         "createdAt": "2022-02-06T14:39:10.000Z",
+ *         "updatedAt": "2022-02-06T14:39:10.000Z",
+ *         "deletedAt": null,
+ *         "CityId": 2
+ *       }
+ *     }
+ * @apiError {String} message Description concise du problème
+ * @apiError {String} error Si statut HTTP >= 500. Valeur du paramètre error de la méthode catch
+ * @apiErrorExample Exemples de réponses d'erreur:
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *       "message": "database error",
+ *       "error": err
+ *     }
+ * 
+ *     HTTP/1.1 400 Bad Request
+ *     {
+ *       "message": "missing parameter",
+ *     }
+ * 
+ *     HTTP/1.1 404 Not Found
+ *     {
+ *       "message": "machine does not exist",
+ *     }
+ */
 router.get('/:id', (req, res) => {
     let machineId = req.params.id
 
@@ -48,7 +90,6 @@ router.get('/:id', (req, res) => {
             })
         }
 
-        // Found machine
         return res.json({ machine })
 
     }).catch(err => {

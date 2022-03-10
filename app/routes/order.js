@@ -69,7 +69,7 @@ router.get('/:id', (req, res) => {
  * @apiDescription Retourne tous les produits d'une commande donnée.
  * @apiName GetOrderProducts
  * @apiGroup Order
- * @apiParam {Number} id Order unique id
+ * @apiParam {Number} id Id unique de la commande
  * @apiSuccess {Product[]} products Tableau des produits de la commande
  * @apiSuccessExample Exemple de réponse de succès:
  *     HTTP/1.1 200 OK
@@ -201,7 +201,7 @@ router.get('/user/:id', (req, res) => {
  * C'est à dire les commandes qui ont un statut "confirmed" ou "paid" et avec une pickupDate non expirée.
  * @apiName GetOrderUserActive
  * @apiGroup Order
- * @apiParam {Number} id User unique id
+ * @apiParam {Number} id Id unique de l'utilisateur
  * @apiSuccess {Order[]} orders Tableau des commandes actives
  * @apiSuccessExample Exemple de réponse de succès:
  *     HTTP/1.1 200 OK
@@ -265,7 +265,6 @@ router.get('/user/:id/active', (req, res) => {
 
         const futureOrders = orders.filter(o => util.isToday(o.pickupDate) || util.isInTheFuture(o.pickupDate))
 
-        // Found user's orders
         return res.json({ orders: futureOrders })
 
     }).catch(err => {
@@ -283,7 +282,7 @@ router.get('/user/:id/active', (req, res) => {
  * C'est à dire les commandes qui ont un statut "cancelled", "archived" ou "retrieved".
  * @apiName GetOrderUserArchive
  * @apiGroup Order
- * @apiParam {Number} id User unique id
+ * @apiParam {Number} id Id unique de l'utilisateur
  * @apiSuccess {Order[]} orders Tableau des commandes archivées
  * @apiSuccessExample Exemple de réponse de succès:
  *     HTTP/1.1 200 OK
@@ -345,7 +344,6 @@ router.get('/user/:id/archive', (req, res) => {
             })
         }
 
-        // Found user's archive orders
         return res.json({ orders })
 
     }).catch(err => {
@@ -357,16 +355,41 @@ router.get('/user/:id/archive', (req, res) => {
 })
 
 
-// Create an order. Total price is automatically calculated with
-// the products ids array.
+/**
+ * @api {post} /order Création commande
+ * @apiDescription Crée une commande. Le prix total est calculé automatiquement
+ * en fonction du prix de chaque produit dont les ids sont contenus dans 
+ * le champ products du body.
+ * @apiName PostOrder
+ * @apiGroup Order
+ * @apiBody {Number} UserId Id unique de l'utilisateur
+ * @apiBody {Number} StatusId Id unique du statut de la commande
+ * @apiBody {Number} VendingMachineId Id unique du distributeur
+ * @apiBody {String} pickupDate Date de récupération de la commande (YYYY-MM-DDTHH:MM:SS.000Z)
+ * @apiBody {Number[]} products Tableau d'ids de produits
+ * @apiSuccess {String} message Message de succés
+ * @apiSuccessExample Exemple de réponse de succès:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "message": "order created"
+ *     }
+ * @apiError {String} message Description concise du problème
+ * @apiError {String} error Si statut HTTP >= 500. Valeur du paramètre error de la méthode catch
+ * @apiErrorExample Exemples de réponses d'erreur:
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *       "message": "unable to create order",
+ *       "error": err
+ *     }
+ */
 router.post('', (req, res) => {
     const { UserId, StatusId, VendingMachineId, pickupDate, products } = req.body
 
-    // Sum the price of every products of the incoming order
+    // Calcule la somme des prix de chaque produit de la commande
     models.Product.sum('price', {
         where: { id: products }
     }).then((calculatedPrice) => {
-        // We can create the order with its total price previously calculated
+        // On peut créer la commande avec le prix total precedemment calculé
         models.Order.create({
             UserId,
             StatusId,
@@ -374,7 +397,7 @@ router.post('', (req, res) => {
             pickupDate,
             price: calculatedPrice
         }).then(order => {
-            // Insert into order_product association table with sequelize mixin
+            // Insertion dans la table de jointure order_product grâce au mixin Sequelize
             order.addProducts(products).then(() => {
                 res.status(200).json({
                     message: "order created"
@@ -395,8 +418,43 @@ router.post('', (req, res) => {
 })
 
 
-// Update one order.
-// Param: id - Order id.
+/**
+ * @api {patch} /order/:id Modification commande
+ * @apiDescription Modifie une commande. Modifiera tous les champs de la ressource
+ * trouvés dans le body.
+ * @apiName PatchOrder
+ * @apiGroup Order
+ * @apiParam {Number} id Id unique de la commande
+ * @apiBody {Number} [price] Prix de la commande
+ * @apiBody {String} [pickupDate] Date de récupération de la commande (YYYY-MM-DDTHH:MM:SS.000Z)
+ * @apiBody {Number} [UserId] Id unique de l'utilisateur
+ * @apiBody {Number} [StatusId] Id unique du statut
+ * @apiBody {Number} [VendingMachineId] Id unique du distributeur
+ * @apiSuccess {String} message Message de succés
+ * @apiSuccessExample Exemple de réponse de succès:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "message": "order updated"
+ *     }
+ * @apiError {String} message Description concise du problème
+ * @apiError {String} error Si statut HTTP >= 500. Valeur du paramètre error de la méthode catch
+ * @apiErrorExample Exemples de réponses d'erreur:
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *       "message": "database error",
+ *       "error": err
+ *     }
+ * 
+ *     HTTP/1.1 400 Bad Request
+ *     {
+ *       "message": "missing parameter"
+ *     }
+ * 
+ *     HTTP/1.1 404 Not Found
+ *     {
+ *       "message": "order does not exists"
+ *     }
+ */
 router.patch('/:id', (req, res) => {
     let orderId = parseInt(req.params.id)
 
