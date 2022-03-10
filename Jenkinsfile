@@ -8,7 +8,6 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'npm install'
                 sh 'chmod +x build.sh && ./build.sh'
                 echo 'Built'
             }
