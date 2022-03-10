@@ -9,7 +9,7 @@ pipeline {
         stage('Build') {
             steps {
                 sh 'npm install'
-                sh './build.sh'
+                sh 'chmod +x build.sh && ./build.sh'
                 echo 'Built'
             }
         }
