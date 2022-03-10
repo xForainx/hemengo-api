@@ -20,7 +20,6 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                sh 'npm start'
                 echo 'Deployed'
             }
         }
