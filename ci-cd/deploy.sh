@@ -1,2 +1,2 @@
 #!/bin/bash
-npm run start
+docker-compose up
