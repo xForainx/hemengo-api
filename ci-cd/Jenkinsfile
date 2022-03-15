@@ -6,21 +6,26 @@ pipeline {
         }
     }
     stages {
+        stage('Prepare') {
+            steps {
+                sh 'chmod +x build.sh'
+                sh 'chmod +x test.sh'
+                sh 'chmod +x deploy.sh'
+            }
+        }
         stage('Build') {
             steps {
-                sh 'chmod +x build.sh && ./build.sh'
-                echo 'Built'
+                sh './build.sh'
             }
         }
         stage('Test') {
             steps {
-                sh 'npm run test'
-                echo 'Tested'
+                sh './test.sh'
             }
         }
         stage('Deploy') {
             steps {
-                echo 'Deployed'
+                sh './deploy.sh'
             }
         }
     }
