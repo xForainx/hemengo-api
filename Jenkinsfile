@@ -8,24 +8,24 @@ pipeline {
     stages {
         stage('Prepare') {
             steps {
-                sh 'chmod +x build.sh'
-                sh 'chmod +x test.sh'
-                sh 'chmod +x deploy.sh'
+                sh 'chmod +x ./ci-cd/build.sh'
+                sh 'chmod +x ./ci-cd/test.sh'
+                sh 'chmod +x ./ci-cd/deploy.sh'
             }
         }
         stage('Build') {
             steps {
-                sh './build.sh'
+                sh './ci-cd/build.sh'
             }
         }
         stage('Test') {
             steps {
-                sh './test.sh'
+                sh './ci-cd/test.sh'
             }
         }
         stage('Deploy') {
             steps {
-                sh './deploy.sh'
+                sh './ci-cd/deploy.sh'
             }
         }
     }
