@@ -9,10 +9,10 @@ services:
     ports:
       - 3306:3306
     environment:
-      MYSQL_DATABASE: $DOCKER_DB_NAME
-      MYSQL_USER: $DOCKER_DB_USER
-      MYSQL_PASSWORD: $DOCKER_DB_PASS
-      MYSQL_ROOT_PASSWORD: $DOCKER_DB_ROOT_PASS
+      MYSQL_DATABASE: $DB_NAME
+      MYSQL_USER: $DB_USER
+      MYSQL_PASSWORD: $DB_PASS
+      MYSQL_ROOT_PASSWORD: $DB_ROOT_PASS
     volumes:
       - ./data:/var/lib/mysql
 
