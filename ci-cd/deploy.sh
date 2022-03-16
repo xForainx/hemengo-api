@@ -1,2 +1,3 @@
 #!/bin/bash
-npm run start
+#npm run start
+echo "Deployed"
