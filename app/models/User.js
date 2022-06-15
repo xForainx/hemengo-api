@@ -4,7 +4,7 @@ const db = require('../db.config')
 /**
  * User model definition.
  */
-const User = db.define('User', {
+const User = db.define('user', {
     id: {
         type: DataTypes.INTEGER(11),
         primaryKey: true,
