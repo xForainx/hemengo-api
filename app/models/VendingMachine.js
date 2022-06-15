@@ -7,7 +7,7 @@ const db = require('../db.config')
  * It implements a FK cityId that points to cities.id (which gives us the city name, 
  * postal code and insee code).
  */
-const VendingMachine = db.define('vendingMachine', {
+const VendingMachine = db.define('vendingmachine', {
     id: {
         type: DataTypes.INTEGER(11),
         primaryKey: true,
